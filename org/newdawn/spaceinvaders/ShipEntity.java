@@ -22,13 +22,14 @@ public class ShipEntity extends Entity {
 		
 		this.game = game;
 	}
-	
+
 	/**
-	 * Request that the ship move itself based on an elapsed ammount of
+	 * Request that the ship move itself based on an elapsed amount of
 	 * time
 	 * 
 	 * @param delta The time that has elapsed since last move (ms)
 	 */
+	@Override
 	public void move(long delta) {
 		// if we're moving left and have reached the left hand side
 		// of the screen, don't move
@@ -49,6 +50,7 @@ public class ShipEntity extends Entity {
 	 * 
 	 * @param other The entity with which the ship has collided
 	 */
+	@Override
 	public void collidedWith(Entity other) {
 		// if its an alien, notify the game that the player
 		// is dead

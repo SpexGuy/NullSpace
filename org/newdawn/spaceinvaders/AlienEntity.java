@@ -6,7 +6,7 @@ package org.newdawn.spaceinvaders;
  * @author Kevin Glass
  */
 public class AlienEntity extends Entity {
-	/** The speed at which the alient moves horizontally */
+	/** The speed at which the alien moves horizontally */
 	private double moveSpeed = 75;
 	/** The game in which the entity exists */
 	private Game game;
@@ -31,6 +31,7 @@ public class AlienEntity extends Entity {
 	 * 
 	 * @param delta The time that has elapsed since last move
 	 */
+	@Override
 	public void move(long delta) {
 		// if we have reached the left hand side of the screen and
 		// are moving left then request a logic update 
@@ -50,6 +51,7 @@ public class AlienEntity extends Entity {
 	/**
 	 * Update the game logic related to aliens
 	 */
+	@Override
 	public void doLogic() {
 		// swap over horizontal movement and move down the
 		// screen a bit
@@ -68,6 +70,7 @@ public class AlienEntity extends Entity {
 	 * 
 	 * @param other The other entity
 	 */
+	@Override
 	public void collidedWith(Entity other) {
 		// collisions with aliens are handled elsewhere
 	}

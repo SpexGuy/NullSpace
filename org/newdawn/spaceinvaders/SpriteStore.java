@@ -1,15 +1,11 @@
 package org.newdawn.spaceinvaders;
 
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.Transparency;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-
-import javax.imageio.ImageIO;
 
 /**
  * A resource manager for sprites in the game. Its often quite important
@@ -35,7 +31,7 @@ public class SpriteStore {
 	}
 	
 	/** The cached sprite map, from reference to sprite instance */
-	private HashMap sprites = new HashMap();
+	private HashMap<String, Sprite> sprites = new HashMap<>();
 	
 	/**
 	 * Retrieve a sprite from the store
@@ -47,7 +43,7 @@ public class SpriteStore {
 		// if we've already got the sprite in the cache
 		// then just return the existing version
 		if (sprites.get(ref) != null) {
-			return (Sprite) sprites.get(ref);
+			return sprites.get(ref);
 		}
 		
 		// otherwise, go away and grab the sprite from the resource

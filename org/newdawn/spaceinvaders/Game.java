@@ -1,18 +1,13 @@
 package org.newdawn.spaceinvaders;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
  * The main hook of our game. This class with both act as a manager
@@ -32,12 +27,13 @@ import javax.swing.JPanel;
 public class Game extends Canvas {
 	/** The stragey that allows us to use accelerate page flipping */
 	private BufferStrategy strategy;
+
 	/** True if the game is currently "running", i.e. the game loop is looping */
 	private boolean gameRunning = true;
 	/** The list of all the entities that exist in our game */
-	private ArrayList entities = new ArrayList();
+	private ArrayList<Entity> entities = new ArrayList<>();
 	/** The list of entities that need to be removed from the game this loop */
-	private ArrayList removeList = new ArrayList();
+	private ArrayList<Entity> removeList = new ArrayList<>();
 	/** The entity representing the player */
 	private Entity ship;
 	/** The speed at which the player's ship should move (pixels/sec) */
@@ -67,7 +63,7 @@ public class Game extends Canvas {
 	 */
 	public Game() {
 		// create a frame to contain our game
-		JFrame container = new JFrame("Space Invaders 101");
+		JFrame container = new JFrame("Null Space");
 		
 		// get hold the content of the frame and set up the resolution of the game
 		JPanel panel = (JPanel) container.getContentPane();
@@ -196,9 +192,7 @@ public class Game extends Canvas {
 		
 		// if there are still some aliens left then they all need to get faster, so
 		// speed up all the existing aliens
-		for (int i=0;i<entities.size();i++) {
-			Entity entity = (Entity) entities.get(i);
-			
+		for (Entity entity : entities) {
 			if (entity instanceof AlienEntity) {
 				// speed up by 2%
 				entity.setHorizontalMovement(entity.getHorizontalMovement() * 1.02);
@@ -253,17 +247,13 @@ public class Game extends Canvas {
 			
 			// cycle round asking each entity to move itself
 			if (!waitingForKeyPress) {
-				for (int i=0;i<entities.size();i++) {
-					Entity entity = (Entity) entities.get(i);
-					
+				for (Entity entity : entities) {
 					entity.move(delta);
 				}
 			}
 			
 			// cycle round drawing all the entities we have in the game
-			for (int i=0;i<entities.size();i++) {
-				Entity entity = (Entity) entities.get(i);
-				
+			for (Entity entity : entities) {
 				entity.draw(g);
 			}
 			
@@ -272,8 +262,8 @@ public class Game extends Canvas {
 			// both entities that the collision has occured
 			for (int p=0;p<entities.size();p++) {
 				for (int s=p+1;s<entities.size();s++) {
-					Entity me = (Entity) entities.get(p);
-					Entity him = (Entity) entities.get(s);
+					Entity me = entities.get(p);
+					Entity him = entities.get(s);
 					
 					if (me.collidesWith(him)) {
 						me.collidedWith(him);
@@ -290,8 +280,7 @@ public class Game extends Canvas {
 			// be resolved, cycle round every entity requesting that
 			// their personal logic should be considered.
 			if (logicRequiredThisLoop) {
-				for (int i=0;i<entities.size();i++) {
-					Entity entity = (Entity) entities.get(i);
+				for (Entity entity : entities) {
 					entity.doLogic();
 				}
 				
