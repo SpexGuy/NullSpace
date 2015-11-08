@@ -45,6 +45,7 @@ public class Game extends Canvas {
 	private long firingInterval = 500;
 	/** The number of aliens left on the screen */
 	private int alienCount;
+	private PowerupManager powerupManager = new PowerupManager(this, 4);
 
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
@@ -240,37 +241,35 @@ public class Game extends Canvas {
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
 			g.setColor(Color.black);
 			g.fillRect(0,0,800,600);
-			
-			// cycle round asking each entity to move itself
+
 			if (currentMessage == null) {
+				// cycle round asking each entity to move itself
 				for (Entity entity : entities) {
 					entity.move(delta);
 				}
+				// brute force collisions, compare every entity against
+				// every other entity. If any of them collide notify
+				// both entities that the collision has occured
+				for (int p = 0; p < entities.size(); p++) {
+					for (int s = p + 1; s < entities.size(); s++) {
+						Entity me = entities.get(p);
+						Entity him = entities.get(s);
+
+						if (me.collidesWith(him)) {
+							me.collidedWith(him);
+							him.collidedWith(me);
+						}
+					}
+				}
+				// remove any entity that has been marked for clear up
+				entities.removeAll(removeList);
+				removeList.clear();
 			}
-			
+
 			// cycle round drawing all the entities we have in the game
 			for (Entity entity : entities) {
 				entity.draw(g);
 			}
-			
-			// brute force collisions, compare every entity against
-			// every other entity. If any of them collide notify 
-			// both entities that the collision has occured
-			for (int p=0;p<entities.size();p++) {
-				for (int s=p+1;s<entities.size();s++) {
-					Entity me = entities.get(p);
-					Entity him = entities.get(s);
-					
-					if (me.collidesWith(him)) {
-						me.collidedWith(him);
-						him.collidedWith(me);
-					}
-				}
-			}
-			
-			// remove any entity that has been marked for clear up
-			entities.removeAll(removeList);
-			removeList.clear();
 
 			// if a game event has indicated that game logic should
 			// be resolved, cycle round every entity requesting that
@@ -282,7 +281,9 @@ public class Game extends Canvas {
 				
 				logicRequiredThisLoop = false;
 			}
-			
+
+			powerupManager.draw(g);
+
 			// if we're waiting for an "any key" press then draw the 
 			// current message
 			if (currentMessage != null) {
@@ -327,6 +328,13 @@ public class Game extends Canvas {
 		startGame(); // TODO: better
 	}
 
+	public void onCorrectCharacter() {
+		// TODO: Increment streak
+	}
+	public void onIncorrectCharacter() {
+		// TODO: End streak
+	}
+
 	/**
 	 * A class to handle keyboard input from the user. The class
 	 * handles both dynamic input during game play, i.e. left/right 
@@ -357,15 +365,18 @@ public class Game extends Canvas {
 				return;
 			}
 
-			
+
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				leftPressed = true;
 			}
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				rightPressed = true;
 			}
-			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				firePressed = true;
+			}
+			else {
+				powerupManager.tryCharacter(e.getKeyChar());
 			}
 		} 
 		
