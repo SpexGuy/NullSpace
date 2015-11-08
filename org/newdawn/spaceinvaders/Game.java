@@ -405,7 +405,7 @@ public class Game extends Canvas {
 			// the shoot or move keys, hence the use of the "pressCount"
 			// counter.
 			if (currentMessage != null) {
-				if (pressCount == 1) {
+				if (pressCount >= 1) {
 					// since we've now recieved our key typed
 					// event we can mark it as such and start 
 					// our new game
