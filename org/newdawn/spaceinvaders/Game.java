@@ -30,6 +30,7 @@ public class Game extends Canvas {
 
 	/** True if the game is currently "running", i.e. the game loop is looping */
 	private boolean gameRunning = true;
+	private Message currentMessage = null;
 	/** The list of all the entities that exist in our game */
 	private ArrayList<Entity> entities = new ArrayList<>();
 	/** The list of entities that need to be removed from the game this loop */
@@ -44,11 +45,7 @@ public class Game extends Canvas {
 	private long firingInterval = 500;
 	/** The number of aliens left on the screen */
 	private int alienCount;
-	
-	/** The message to display which waiting for a key press */
-	private String message = "";
-	/** True if we're holding up game play until a key has been pressed */
-	private boolean waitingForKeyPress = true;
+
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
 	/** True if the right cursor key is currently pressed */
@@ -106,6 +103,7 @@ public class Game extends Canvas {
 		// initialise the entities in our game so there's something
 		// to see at startup
 		initEntities();
+		currentMessage = new Message(this, "Welcome to NullSpace!");
 	}
 	
 	/**
@@ -166,8 +164,7 @@ public class Game extends Canvas {
 	 * Notification that the player has died. 
 	 */
 	public void notifyDeath() {
-		message = "Oh no! They got you, try again?";
-		waitingForKeyPress = true;
+		setMessage(new Message(this, "Oh no! They got you, try again?"));
 	}
 	
 	/**
@@ -175,8 +172,7 @@ public class Game extends Canvas {
 	 * are dead.
 	 */
 	public void notifyWin() {
-		message = "Well done! You Win!";
-		waitingForKeyPress = true;
+		setMessage(new Message(this, "Well done! You Win!"));
 	}
 	
 	/**
@@ -246,7 +242,7 @@ public class Game extends Canvas {
 			g.fillRect(0,0,800,600);
 			
 			// cycle round asking each entity to move itself
-			if (!waitingForKeyPress) {
+			if (currentMessage == null) {
 				for (Entity entity : entities) {
 					entity.move(delta);
 				}
@@ -288,11 +284,9 @@ public class Game extends Canvas {
 			}
 			
 			// if we're waiting for an "any key" press then draw the 
-			// current message 
-			if (waitingForKeyPress) {
-				g.setColor(Color.white);
-				g.drawString(message,(800-g.getFontMetrics().stringWidth(message))/2,250);
-				g.drawString("Press any key",(800-g.getFontMetrics().stringWidth("Press any key"))/2,300);
+			// current message
+			if (currentMessage != null) {
+				currentMessage.draw(g);
 			}
 			
 			// finally, we've completed drawing so clear up the graphics
@@ -322,7 +316,17 @@ public class Game extends Canvas {
 			try { Thread.sleep(10); } catch (Exception e) {}
 		}
 	}
-	
+
+	public void setMessage(Message nextMessage) {
+		nextMessage.reset();
+		currentMessage = nextMessage;
+	}
+
+	public void messageFinished() {
+		currentMessage = null;
+		startGame(); // TODO: better
+	}
+
 	/**
 	 * A class to handle keyboard input from the user. The class
 	 * handles both dynamic input during game play, i.e. left/right 
@@ -349,10 +353,10 @@ public class Game extends Canvas {
 		public void keyPressed(KeyEvent e) {
 			// if we're waiting for an "any key" typed then we don't 
 			// want to do anything with just a "press"
-			if (waitingForKeyPress) {
+			if (currentMessage != null) {
 				return;
 			}
-			
+
 			
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				leftPressed = true;
@@ -373,7 +377,7 @@ public class Game extends Canvas {
 		public void keyReleased(KeyEvent e) {
 			// if we're waiting for an "any key" typed then we don't 
 			// want to do anything with just a "released"
-			if (waitingForKeyPress) {
+			if (currentMessage != null) {
 				return;
 			}
 			
@@ -400,13 +404,12 @@ public class Game extends Canvas {
 			// have had a keyType() event from the user releasing
 			// the shoot or move keys, hence the use of the "pressCount"
 			// counter.
-			if (waitingForKeyPress) {
+			if (currentMessage != null) {
 				if (pressCount == 1) {
 					// since we've now recieved our key typed
 					// event we can mark it as such and start 
 					// our new game
-					waitingForKeyPress = false;
-					startGame();
+					currentMessage.dismiss();
 					pressCount = 0;
 				} else {
 					pressCount++;
