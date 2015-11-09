@@ -34,13 +34,13 @@ public class PowerupManager {
         assert(numPages <= powerups.length);
         this.numPages = numPages;
         this.powerups = new Powerup[] {
-                new WeaponPowerup(game, Color.BLUE, powerLeakage, new FastReloadWeapon(), "Fast Reload"),
+                new WeaponPowerup(game, Color.BLUE, powerLeakage, new ProjectileWeapon(game, 250), "Fast Reload"),
                 new DoubleScorePowerup(game, Color.CYAN, powerLeakage),
                 new WingmanPowerup(game, Color.GREEN, powerLeakage),
                 new PausePowerup(game, Color.YELLOW, powerLeakage),
-                new WeaponPowerup(game, Color.ORANGE, powerLeakage, new PiercingWeapon(), "Piercing Shots"),
+                new WeaponPowerup(game, Color.ORANGE, powerLeakage, new PiercingWeapon(game, 500), "Piercing Shots"),
                 new BackInTimePowerup(game, Color.RED, powerLeakage),
-                new WeaponPowerup(game, Color.MAGENTA, powerLeakage, new LaserWeapon(), "Laser"),
+                new WeaponPowerup(game, Color.MAGENTA, powerLeakage, new LaserWeapon(game, 500), "Laser"),
                 new BreakoutPowerup(game, new Color(0x7F00FF), powerLeakage)
         };
         setTargetCharacter();

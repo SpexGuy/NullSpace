@@ -39,12 +39,10 @@ public class Game extends Canvas {
 	private Entity ship;
 	/** The speed at which the player's ship should move (pixels/sec) */
 	private double moveSpeed = 300;
-	/** The time at which last fired a shot */
-	private long lastFire = 0;
-	/** The interval between our players shot (ms) */
-	private long firingInterval = 500;
 	/** The number of aliens left on the screen */
 	private int alienCount;
+	private final Weapon defaultWeapon = new ProjectileWeapon(this, 500);
+	private Weapon weapon = defaultWeapon;
 	private PowerupManager powerupManager = new PowerupManager(this, 8);
 	private KonamiCode konami = new KonamiCode(this);
 	private Cheater cheater = new Cheater(this);
@@ -200,23 +198,6 @@ public class Game extends Canvas {
 	}
 	
 	/**
-	 * Attempt to fire a shot from the player. Its called "try"
-	 * since we must first check that the player can fire at this 
-	 * point, i.e. has he/she waited long enough between shots
-	 */
-	public void tryToFire() {
-		// check that we have waiting long enough to fire
-		if (System.currentTimeMillis() - lastFire < firingInterval) {
-			return;
-		}
-		
-		// if we waited long enough, create the shot entity, and record the time.
-		lastFire = System.currentTimeMillis();
-		ShotEntity shot = new ShotEntity(this,"sprites/shot.gif",ship.getX()+10,ship.getY()-30);
-		entities.add(shot);
-	}
-	
-	/**
 	 * The main game loop. This loop is running during all game
 	 * play as is responsible for the following activities:
 	 * <p>
@@ -312,7 +293,7 @@ public class Game extends Canvas {
 			
 			// if we're pressing fire, attempt to fire
 			if (firePressed) {
-				tryToFire();
+				weapon.tryToFire(ship);
 			}
 			
 			// finally pause for a bit. Note: this should run us at about
@@ -340,10 +321,10 @@ public class Game extends Canvas {
 	}
 
 	public void setWeapon(Weapon weapon) {
-		// TODO: Use Weapons
+		this.weapon = weapon;
 	}
 	public void setDefaultWeapon() {
-		// TODO
+		this.weapon = defaultWeapon;
 	}
 
 	public void startDoubleScore() {
@@ -379,6 +360,10 @@ public class Game extends Canvas {
 
 	public void acceptKonamiCode() {
 		cheater.activate();
+	}
+
+	public void addProjectile(Entity shot) {
+		entities.add(shot);
 	}
 
 	/**
