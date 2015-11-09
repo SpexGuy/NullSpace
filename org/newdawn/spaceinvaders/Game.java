@@ -43,6 +43,7 @@ public class Game extends Canvas {
 	private PowerupManager powerupManager = new PowerupManager(this, 8);
 	private KonamiCode konami = new KonamiCode(this);
 	private Cheater cheater = new Cheater(this);
+	private int aliensCount;
 
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
@@ -131,10 +132,12 @@ public class Game extends Canvas {
 		ships.add(ship);
 		
 		// create a block of aliens (5 rows, by 12 aliens, spaced evenly)
+		aliensCount = 0;
 		for (int row=0;row<5;row++) {
 			for (int x=0;x<12;x++) {
 				AlienEntity alien = new AlienEntity(this,"sprites/alien.gif",100+(x*50),(50)+row*30);
 				aliens.add(alien);
+				aliensCount++;
 			}
 		}
 	}
@@ -166,7 +169,9 @@ public class Game extends Canvas {
 	 * Notification that an alien has been killed
 	 */
 	public void notifyAlienKilled() {
-		if (aliens.size() == 0) {
+		aliensCount--;
+
+		if (aliensCount == 0) {
 			notifyWin();
 		}
 		
