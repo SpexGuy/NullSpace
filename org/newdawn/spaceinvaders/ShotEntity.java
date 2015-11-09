@@ -10,6 +10,7 @@ public class ShotEntity extends Entity {
 	private double moveSpeed = -300;
 	/** The game in which this entity exists */
 	private Game game;
+	private int numHits;
 	/** True if this shot has been "used", i.e. its hit something */
 	private boolean used = false;
 	
@@ -21,12 +22,13 @@ public class ShotEntity extends Entity {
 	 * @param x The initial x location of the shot
 	 * @param y The initial y location of the shot
 	 */
-	public ShotEntity(Game game,String sprite,int x,int y) {
+	public ShotEntity(Game game,String sprite,int x,int y, int numHits) {
 		super(sprite,x,y);
 		
 		this.game = game;
 		
 		dy = moveSpeed;
+		this.numHits = numHits;
 	}
 
 	/**
@@ -55,19 +57,20 @@ public class ShotEntity extends Entity {
 	public void collidedWith(Entity other) {
 		// prevents double kills, if we've already hit something,
 		// don't collide
-		if (used) {
+		if (numHits == 0) {
 			return;
 		}
 		
 		// if we've hit an alien, kill it!
 		if (other instanceof AlienEntity) {
 			// remove the affected entities
-			game.getProjectiles().remove(this);
+			if (numHits == 1)
+				game.getProjectiles().remove(this);
 			game.getAliens().remove((AlienEntity) other);
 			
 			// notify the game that the alien has been killed
 			game.notifyAlienKilled();
-			used = true;
+			--numHits;
 		}
 	}
 }

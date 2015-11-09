@@ -36,7 +36,7 @@ class ProjectileWeapon extends Weapon {
     }
     @Override
     protected Entity createShotEntity(Entity ship) {
-        return new ShotEntity(game,"sprites/shot.gif",ship.getX()+10,ship.getY()-30);
+        return new ShotEntity(game,"sprites/shot.gif",ship.getX()+10,ship.getY()-30, 1);
     }
 }
 
@@ -47,7 +47,7 @@ class PiercingWeapon extends Weapon {
     @Override
     protected Entity createShotEntity(Entity ship) {
         // TODO: Piercing shots
-        return new ShotEntity(game,"sprites/shot.gif",ship.getX()+10,ship.getY()-30);
+        return new ShotEntity(game,"sprites/drill.png",ship.getX()+10,ship.getY()-30, 5);
     }
 }
 
@@ -58,6 +58,6 @@ class LaserWeapon extends Weapon {
     @Override
     protected Entity createShotEntity(Entity ship) {
         // TODO: Laser shots
-        return new ShotEntity(game,"sprites/shot.gif",ship.getX()+10,ship.getY()-30);
+        return new ShotEntity(game,"sprites/shot.gif",ship.getX()+10,ship.getY()-30, 100);
     }
 }
