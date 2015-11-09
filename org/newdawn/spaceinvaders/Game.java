@@ -47,6 +47,7 @@ public class Game extends Canvas {
 	private int alienCount;
 	private PowerupManager powerupManager = new PowerupManager(this, 8);
 	private KonamiCode konami = new KonamiCode(this);
+	private Cheater cheater = new Cheater(this);
 
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
@@ -283,6 +284,8 @@ public class Game extends Canvas {
 				logicRequiredThisLoop = false;
 			}
 
+			cheater.draw(g);
+
 			powerupManager.draw(g);
 
 			// if we're waiting for an "any key" press then draw the 
@@ -375,7 +378,7 @@ public class Game extends Canvas {
 	}
 
 	public void acceptKonamiCode() {
-		setMessage(new Message(this, "Konami code!"));
+		cheater.activate();
 	}
 
 	/**
