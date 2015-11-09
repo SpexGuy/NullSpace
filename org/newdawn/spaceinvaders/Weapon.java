@@ -24,7 +24,7 @@ public abstract class Weapon {
         // if we waited long enough, create the shot entity, and record the time.
         lastFire = System.currentTimeMillis();
         Entity shot = createShotEntity(ship);
-        game.addProjectile(shot);
+        game.getProjectiles().add(shot);
     }
 
     protected abstract Entity createShotEntity(Entity ship);
