@@ -14,19 +14,18 @@ public class PowerupManager {
             {'A','S','D','F','Q','W','E','R','Z','X','C','V'},
             {'A','S','D','F','Q','W','E','R','Z','X','C','V','T','G','B'}
     };
-    private static final Color[] pageColors = {
-            Color.BLUE,
-            Color.CYAN,
-            Color.GREEN,
-            Color.YELLOW,
-            Color.ORANGE,
-            Color.RED,
-            Color.MAGENTA,
-            new Color(0x7F00FF)
-    };
+    private static class NoopPowerup extends Powerup {
+        // TODO: Delete this dummy powerup
+        public NoopPowerup(Game game, Color color, double leakageRate) {
+            super(game, color, leakageRate, "Lol NoOp");
+        }
+        @Override public void activate() {}
+        @Override public void deactivate() {}
+    }
     private static final double powerLeakage = 1.0/(8 * 60);
 
     private Game game;
+    private Powerup[] powerups;
 
     private int numPages;
     private int levelNumber = 0;
@@ -35,19 +34,29 @@ public class PowerupManager {
     private int pageNumber = 0;
     private double pageScore = 0;
     private char target;
-    private boolean powerupActive;
+    private Powerup activePowerup = null;
 
     public PowerupManager(Game game, int numPages) {
         this.game = game;
         assert(numPages >= 1);
-        assert(numPages <= pageColors.length);
+        assert(numPages <= powerups.length);
         this.numPages = numPages;
+        this.powerups = new Powerup[] {
+                new NoopPowerup(game, Color.BLUE, powerLeakage),
+                new NoopPowerup(game, Color.CYAN, powerLeakage),
+                new NoopPowerup(game, Color.GREEN, powerLeakage),
+                new NoopPowerup(game, Color.YELLOW, powerLeakage),
+                new NoopPowerup(game, Color.ORANGE, powerLeakage),
+                new NoopPowerup(game, Color.RED, powerLeakage),
+                new NoopPowerup(game, Color.MAGENTA, powerLeakage),
+                new NoopPowerup(game, new Color(0x7F00FF), powerLeakage)
+        };
         setTargetCharacter();
     }
 
     public void setNumPages(int numPages) {
         assert(numPages >= 1);
-        assert(numPages <= pageColors.length);
+        assert(numPages <= powerups.length);
         this.numPages = numPages;
     }
 
@@ -74,17 +83,38 @@ public class PowerupManager {
         g.setColor(Color.WHITE);
         g.drawRoundRect(5, 5, 20, 20, 5, 5);
         FontMetrics fm = g.getFontMetrics();
-        g.drawString(""+target, 5 + 20/2 - fm.charWidth(target)/2, 5 + 20/2 + fm.getAscent()/2);
+        g.drawString(""+target, 5 + 20/2 - fm.charWidth(target)/2, 5 + 20/2 + fm.getHeight()/2 - fm.getDescent());
 
         int width = game.getWidth() - 5 - 10 - 20 - 5;
-        if (!powerupActive && pageNumber > 0) {
-            g.setColor(pageColors[pageNumber-1]);
+        if (activePowerup == null && pageNumber > 0) {
+            g.setColor(powerups[pageNumber-1].getColor());
             g.fillRoundRect(5 + 20 + 10, 5, width, 20, 5, 5);
         }
-        g.setColor(pageColors[pageNumber]);
+        g.setColor(powerups[pageNumber].getColor());
         g.fillRoundRect(5 + 20 + 10, 5, (int)(pageScore * width), 20, 5, 5);
         g.setColor(Color.DARK_GRAY);
         g.drawRoundRect(5 + 20 + 10, 5, width, 20, 5, 5);
+
+        for (int c = 0; c < numPages; c++) {
+            int x = 5 + ((game.getWidth() - 10) * (c%4))/4;
+            int y = 25 * (1 + c/4) + 5;
+            if (activePowerup != null) {
+                if (activePowerup == powerups[c]) {
+                    g.setColor(powerups[c].getColor());
+                    g.fillRoundRect(x, y, 20, 20, 5, 5);
+                    g.setColor(Color.WHITE);
+                } else {
+                    g.setColor(Color.GRAY);
+                }
+            } else if (powerupAvailable(c)) {
+                g.setColor(Color.WHITE);
+            } else {
+                g.setColor(Color.GRAY);
+            }
+            g.drawRoundRect(x, y, 20, 20, 5, 5);
+            g.drawString(""+(c+1), x + 20/2 - fm.charWidth((char)(c+'1'))/2, y + 20/2 + fm.getHeight()/2 - fm.getDescent());
+            g.drawString(powerups[c].getName(), x + 20 + 5, y + 20/2 + fm.getHeight()/2 - fm.getDescent());
+        }
 
         if (flashCounter > 0) {
             int alpha = (flashIntensity*flashCounter) / flashDuration;
@@ -103,19 +133,23 @@ public class PowerupManager {
                 onIncorrectCharacter();
             }
             return true;
-        } else if (!powerupActive && Character.isDigit(key)) {
-            int index = key - '0';
-            if (index >= 1 && index <= pageNumber) {
-                activatePowerup(index - 1);
+        } else if (activePowerup == null && Character.isDigit(key)) {
+            int index = key - '1';
+            if (powerupAvailable(index)) {
+                activatePowerup(index);
             }
             return true;
         }
         return false;
     }
 
+    private boolean powerupAvailable(int index) {
+        return index < pageNumber || (index == pageNumber && pageScore >= 0.5);
+    }
+
     private void activatePowerup(int index) {
-        game.activatePowerup(index);
-        powerupActive = true;
+        activePowerup = powerups[index];
+        activePowerup.activate();
         if (index < pageNumber) {
             pageScore = 1.0;
         }
@@ -123,8 +157,8 @@ public class PowerupManager {
     }
 
     private void deactivatePowerup() {
-        game.deactivatePowerup();
-        powerupActive = false;
+        activePowerup.deactivate();
+        activePowerup = null;
         pageNumber = 0;
     }
 
@@ -150,7 +184,7 @@ public class PowerupManager {
     }
 
     private void advancePage() {
-        if (powerupActive || pageNumber == numPages - 1) {
+        if (activePowerup != null || pageNumber == numPages - 1) {
             // don't overflow pageNumber
             pageScore = 1.0;
         } else {
@@ -163,7 +197,7 @@ public class PowerupManager {
     }
 
     private void retreatPage() {
-        if (powerupActive) {
+        if (activePowerup != null) {
             deactivatePowerup();
         }
         if (pageNumber == 0) {

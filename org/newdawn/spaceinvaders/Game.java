@@ -45,7 +45,7 @@ public class Game extends Canvas {
 	private long firingInterval = 500;
 	/** The number of aliens left on the screen */
 	private int alienCount;
-	private PowerupManager powerupManager = new PowerupManager(this, 4);
+	private PowerupManager powerupManager = new PowerupManager(this, 6);
 
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
@@ -333,13 +333,6 @@ public class Game extends Canvas {
 	}
 	public void onIncorrectCharacter() {
 		// TODO: End streak
-	}
-
-	public void activatePowerup(int index) {
-		// TODO: Activate powerups
-	}
-	public void deactivatePowerup() {
-		// TODO: Deactivate powerups
 	}
 
 	/**
