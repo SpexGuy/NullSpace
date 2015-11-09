@@ -64,10 +64,7 @@ public class ShotEntity extends Entity {
 			// remove the affected entities
 			if (numHits == 1)
 				game.getProjectiles().remove(this);
-			game.getAliens().remove((AlienEntity) other);
-			
-			// notify the game that the alien has been killed
-			game.notifyAlienKilled();
+			((AlienEntity) other).kill();
 			--numHits;
 		}
 	}
