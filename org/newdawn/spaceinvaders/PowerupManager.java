@@ -14,14 +14,6 @@ public class PowerupManager {
             {'A','S','D','F','Q','W','E','R','Z','X','C','V'},
             {'A','S','D','F','Q','W','E','R','Z','X','C','V','T','G','B'}
     };
-    private static class NoopPowerup extends Powerup {
-        // TODO: Delete this dummy powerup
-        public NoopPowerup(Game game, Color color, double leakageRate) {
-            super(game, color, leakageRate, "Lol NoOp");
-        }
-        @Override public void activate() {}
-        @Override public void deactivate() {}
-    }
     private static final double powerLeakage = 1.0/(8 * 60);
 
     private Game game;
@@ -42,14 +34,14 @@ public class PowerupManager {
         assert(numPages <= powerups.length);
         this.numPages = numPages;
         this.powerups = new Powerup[] {
-                new NoopPowerup(game, Color.BLUE, powerLeakage),
-                new NoopPowerup(game, Color.CYAN, powerLeakage),
-                new NoopPowerup(game, Color.GREEN, powerLeakage),
-                new NoopPowerup(game, Color.YELLOW, powerLeakage),
-                new NoopPowerup(game, Color.ORANGE, powerLeakage),
-                new NoopPowerup(game, Color.RED, powerLeakage),
-                new NoopPowerup(game, Color.MAGENTA, powerLeakage),
-                new NoopPowerup(game, new Color(0x7F00FF), powerLeakage)
+                new WeaponPowerup(game, Color.BLUE, powerLeakage, new FastReloadWeapon(), "Fast Reload"),
+                new DoubleScorePowerup(game, Color.CYAN, powerLeakage),
+                new WingmanPowerup(game, Color.GREEN, powerLeakage),
+                new PausePowerup(game, Color.YELLOW, powerLeakage),
+                new WeaponPowerup(game, Color.ORANGE, powerLeakage, new PiercingWeapon(), "Piercing Shots"),
+                new BackInTimePowerup(game, Color.RED, powerLeakage),
+                new WeaponPowerup(game, Color.MAGENTA, powerLeakage, new LaserWeapon(), "Laser"),
+                new BreakoutPowerup(game, new Color(0x7F00FF), powerLeakage)
         };
         setTargetCharacter();
     }

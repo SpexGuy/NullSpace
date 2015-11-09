@@ -45,7 +45,7 @@ public class Game extends Canvas {
 	private long firingInterval = 500;
 	/** The number of aliens left on the screen */
 	private int alienCount;
-	private PowerupManager powerupManager = new PowerupManager(this, 6);
+	private PowerupManager powerupManager = new PowerupManager(this, 8);
 
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
@@ -333,6 +333,44 @@ public class Game extends Canvas {
 	}
 	public void onIncorrectCharacter() {
 		// TODO: End streak
+	}
+
+	public void setWeapon(Weapon weapon) {
+		// TODO: Use Weapons
+	}
+	public void setDefaultWeapon() {
+		// TODO
+	}
+
+	public void startDoubleScore() {
+		// TODO: Double score mode
+	}
+	public void stopDoubleScore() {
+		// TODO
+	}
+
+	public void addWingman() {
+		// TODO: Wingman
+	}
+	public void removeWingman() {
+		// TODO
+	}
+
+	public void reverseInvaders() {
+		// TODO: VCR Invaders
+	}
+	public void pauseInvaders() {
+		// TODO
+	}
+	public void forwardInvaders() {
+		// TODO
+	}
+
+	public void startBreakout() {
+		// TODO: Breakout mode
+	}
+	public void stopBreakout() {
+		// TODO
 	}
 
 	/**
