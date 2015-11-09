@@ -46,6 +46,7 @@ public class Game extends Canvas {
 	/** The number of aliens left on the screen */
 	private int alienCount;
 	private PowerupManager powerupManager = new PowerupManager(this, 8);
+	private KonamiCode konami = new KonamiCode(this);
 
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
@@ -373,6 +374,10 @@ public class Game extends Canvas {
 		// TODO
 	}
 
+	public void acceptKonamiCode() {
+		setMessage(new Message(this, "Konami code!"));
+	}
+
 	/**
 	 * A class to handle keyboard input from the user. The class
 	 * handles both dynamic input during game play, i.e. left/right 
@@ -413,7 +418,8 @@ public class Game extends Canvas {
 			else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				firePressed = true;
 			}
-			else {
+
+			if (!konami.acceptCharacter(e.getKeyCode())) {
 				powerupManager.tryCharacter(e.getKeyChar());
 			}
 		} 
