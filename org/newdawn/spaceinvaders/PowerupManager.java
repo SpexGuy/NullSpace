@@ -6,6 +6,8 @@ import java.awt.*;
  * Created by martin on 11/8/15.
  */
 public class PowerupManager {
+    private static final int flashDuration = 20;
+    private static final int flashIntensity = 0x7F;
     private static final char[][] levels = {
             {'A','S','D','F'},
             {'A','S','D','F','Q','W','E','R'},
@@ -28,6 +30,7 @@ public class PowerupManager {
 
     private int numPages;
     private int levelNumber = 0;
+    private int flashCounter = 0;
 
     private int pageNumber = 0;
     private double pageScore = 0;
@@ -74,7 +77,7 @@ public class PowerupManager {
 
         int width = game.getWidth() - 5 - 10 - 20 - 5;
         if (pageNumber == 0) {
-            g.setColor(Color.DARK_GRAY);
+            g.setColor(Color.GRAY);
             g.drawRoundRect(5 + 20 + 10, 5, width, 20, 5, 5);
         } else {
             g.setColor(pageColors[pageNumber-1]);
@@ -82,6 +85,13 @@ public class PowerupManager {
         }
         g.setColor(pageColors[pageNumber]);
         g.fillRoundRect(5 + 20 + 10, 5, (int)(pageScore * width), 20, 5, 5);
+
+        if (flashCounter > 0) {
+            int alpha = (flashIntensity*flashCounter) / flashDuration;
+            g.setColor(new Color(255, 0, 0, alpha));
+            g.fillRect(0, 0, game.getWidth(), game.getHeight());
+            --flashCounter;
+        }
     }
 
     public boolean tryCharacter(char key) {
@@ -98,6 +108,7 @@ public class PowerupManager {
     }
 
     private void onIncorrectCharacter() {
+        flashCounter = flashDuration;
         game.onIncorrectCharacter();
     }
 
