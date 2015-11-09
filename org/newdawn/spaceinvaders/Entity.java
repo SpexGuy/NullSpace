@@ -101,13 +101,7 @@ public abstract class Entity {
 	public void draw(Graphics g) {
 		sprite.draw(g,(int) x,(int) y);
 	}
-	
-	/**
-	 * Do the logic associated with this entity. This method
-	 * will be called periodically based on game events
-	 */
-	public void doLogic() {
-	}
+
 	
 	/**
 	 * Get the x location of this entity

@@ -33,6 +33,7 @@ public class Game extends Canvas {
 	private EntityGroup<AlienEntity> aliens = new EntityGroup<>();
 	private EntityGroup<ShipEntity> ships = new EntityGroup<>();
 	private EntityGroup<Entity> projectiles = new EntityGroup<>();
+	private int alienMultiplier = 1;
 	/** The entity representing the player */
 	private ShipEntity ship;
 	/** The speed at which the player's ship should move (pixels/sec) */
@@ -50,7 +51,7 @@ public class Game extends Canvas {
 	/** True if we are firing */
 	private boolean firePressed = false;
 	/** True if game logic needs to be applied this loop, normally as a result of a game event */
-	private boolean logicRequiredThisLoop = false;
+	private boolean aliensHitEdge = false;
 	
 	/**
 	 * Construct our game and set it running.
@@ -139,12 +140,11 @@ public class Game extends Canvas {
 	}
 	
 	/**
-	 * Notification from a game entity that the logic of the game
-	 * should be run at the next opportunity (normally as a result of some
-	 * game event)
+	 * Notification from an alien that the aliens
+	 * should be moved down at the next opportunity
 	 */
-	public void updateLogic() {
-		logicRequiredThisLoop = true;
+	public void alienHitEdge() {
+		aliensHitEdge = true;
 	}
 	
 	/**
@@ -209,7 +209,7 @@ public class Game extends Canvas {
 			if (currentMessage == null) {
 				// cycle round asking each entity to move itself
 				for (Entity entity : aliens) {
-					entity.move(delta);
+					entity.move(alienMultiplier * delta);
 				}
 				for (Entity entity : ships) {
 					entity.move(delta);
@@ -243,18 +243,12 @@ public class Game extends Canvas {
 			// if a game event has indicated that game logic should
 			// be resolved, cycle round every entity requesting that
 			// their personal logic should be considered.
-			if (logicRequiredThisLoop) {
-				for (Entity entity : aliens) {
-					entity.doLogic();
-				}
-				for (Entity entity : ships) {
-					entity.doLogic();
-				}
-				for (Entity entity : projectiles) {
-					entity.doLogic();
+			if (aliensHitEdge) {
+				for (AlienEntity alien : aliens) {
+					alien.moveDown(alienMultiplier);
 				}
 
-				logicRequiredThisLoop = false;
+				aliensHitEdge = false;
 			}
 
 			cheater.draw(g);
@@ -334,13 +328,13 @@ public class Game extends Canvas {
 	}
 
 	public void reverseInvaders() {
-		// TODO: VCR Invaders
+		alienMultiplier = -1;
 	}
 	public void pauseInvaders() {
-		// TODO
+		alienMultiplier = 0;
 	}
 	public void forwardInvaders() {
-		// TODO
+		alienMultiplier = 1;
 	}
 
 	public void startBreakout() {

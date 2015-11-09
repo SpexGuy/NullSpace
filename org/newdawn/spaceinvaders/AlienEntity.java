@@ -35,28 +35,27 @@ public class AlienEntity extends Entity {
 	public void move(long delta) {
 		// if we have reached the left hand side of the screen and
 		// are moving left then request a logic update 
-		if ((dx < 0) && (x < 10)) {
-			game.updateLogic();
+		if ((dx < 0 ^ delta < 0) && (x < 10)) {
+			game.alienHitEdge();
 		}
 		// and vice vesa, if we have reached the right hand side of 
 		// the screen and are moving right, request a logic update
-		if ((dx > 0) && (x > 750)) {
-			game.updateLogic();
+		if ((dx > 0 ^ delta < 0) && (x > 750)) {
+			game.alienHitEdge();
 		}
 		
 		// proceed with normal move
 		super.move(delta);
 	}
-	
+
 	/**
-	 * Update the game logic related to aliens
+	 * Move the aliens down
 	 */
-	@Override
-	public void doLogic() {
+	public void moveDown(int direction) {
 		// swap over horizontal movement and move down the
 		// screen a bit
 		dx = -dx;
-		y += 10;
+		y += direction * 10;
 		
 		// if we've reached the bottom of the screen then the player
 		// dies
