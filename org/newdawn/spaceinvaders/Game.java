@@ -335,6 +335,13 @@ public class Game extends Canvas {
 		// TODO: End streak
 	}
 
+	public void activatePowerup(int index) {
+		// TODO: Activate powerups
+	}
+	public void deactivatePowerup() {
+		// TODO: Deactivate powerups
+	}
+
 	/**
 	 * A class to handle keyboard input from the user. The class
 	 * handles both dynamic input during game play, i.e. left/right 

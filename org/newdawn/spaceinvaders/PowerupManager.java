@@ -35,6 +35,7 @@ public class PowerupManager {
     private int pageNumber = 0;
     private double pageScore = 0;
     private char target;
+    private boolean powerupActive;
 
     public PowerupManager(Game game, int numPages) {
         this.game = game;
@@ -76,15 +77,14 @@ public class PowerupManager {
         g.drawString(""+target, 5 + 20/2 - fm.charWidth(target)/2, 5 + 20/2 + fm.getAscent()/2);
 
         int width = game.getWidth() - 5 - 10 - 20 - 5;
-        if (pageNumber == 0) {
-            g.setColor(Color.GRAY);
-            g.drawRoundRect(5 + 20 + 10, 5, width, 20, 5, 5);
-        } else {
+        if (!powerupActive && pageNumber > 0) {
             g.setColor(pageColors[pageNumber-1]);
             g.fillRoundRect(5 + 20 + 10, 5, width, 20, 5, 5);
         }
         g.setColor(pageColors[pageNumber]);
         g.fillRoundRect(5 + 20 + 10, 5, (int)(pageScore * width), 20, 5, 5);
+        g.setColor(Color.DARK_GRAY);
+        g.drawRoundRect(5 + 20 + 10, 5, width, 20, 5, 5);
 
         if (flashCounter > 0) {
             int alpha = (flashIntensity*flashCounter) / flashDuration;
@@ -97,14 +97,35 @@ public class PowerupManager {
     public boolean tryCharacter(char key) {
         char upperKey = Character.toUpperCase(key);
         if (Character.isUpperCase(upperKey)) {
-            if (upperKey == target){
+            if (upperKey == target) {
                 onCorrectCharacter();
-            }else{
+            } else {
                 onIncorrectCharacter();
+            }
+            return true;
+        } else if (!powerupActive && Character.isDigit(key)) {
+            int index = key - '0';
+            if (index >= 1 && index <= pageNumber) {
+                activatePowerup(index - 1);
             }
             return true;
         }
         return false;
+    }
+
+    private void activatePowerup(int index) {
+        game.activatePowerup(index);
+        powerupActive = true;
+        if (index < pageNumber) {
+            pageScore = 1.0;
+        }
+        pageNumber = index;
+    }
+
+    private void deactivatePowerup() {
+        game.deactivatePowerup();
+        powerupActive = false;
+        pageNumber = 0;
     }
 
     private void onIncorrectCharacter() {
@@ -129,7 +150,7 @@ public class PowerupManager {
     }
 
     private void advancePage() {
-        if (pageNumber == numPages - 1) {
+        if (powerupActive || pageNumber == numPages - 1) {
             // don't overflow pageNumber
             pageScore = 1.0;
         } else {
@@ -142,6 +163,9 @@ public class PowerupManager {
     }
 
     private void retreatPage() {
+        if (powerupActive) {
+            deactivatePowerup();
+        }
         if (pageNumber == 0) {
             // don't underflow pageNumber
             pageScore = 0.0;
