@@ -11,8 +11,6 @@ public class ShotEntity extends Entity {
 	/** The game in which this entity exists */
 	private Game game;
 	private int numHits;
-	/** True if this shot has been "used", i.e. its hit something */
-	private boolean used = false;
 	
 	/**
 	 * Create a new shot from the player
