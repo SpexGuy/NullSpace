@@ -36,16 +36,14 @@ I need to change the game somewhat. But how? Powerups alone won't do it.
  - context-switch required to unlock powerups
 
 ## Powerup Ideas:
- - shield
- - fast shot
- - laser (instant shot)
- - double score
- - wingman
- - left/right angled shots
- - piercing shots
- - faster ship
- - back-in-time (move invaders back)
- - breakout (convert game to breakout) (unlocked when you die 3 times)
+ - shield (1)
+ - fast shot (2)
+ - double score (3)
+ - back-in-time (move invaders back) (4)
+ - wingman (5)
+ - piercing shots (6)
+ - laser (instant shot) (7)
+ - breakout (convert game to breakout) (8)
 
 ## How are powerups obtained?
  - kill special enemies
