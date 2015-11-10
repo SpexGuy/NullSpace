@@ -66,7 +66,7 @@ public class AlienEntity extends Entity {
 
 	public void kill() {
 		game.getAliens().remove(this);
-		game.notifyAlienKilled();
+		game.notifyAlienKilled(this);
 	}
 	
 	/**

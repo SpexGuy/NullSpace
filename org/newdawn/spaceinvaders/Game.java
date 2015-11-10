@@ -42,6 +42,7 @@ public class Game extends Canvas {
 	private final Weapon defaultWeapon = new ProjectileWeapon(this, 500);
 	private Weapon weapon = defaultWeapon;
 	private PowerupManager powerupManager = new PowerupManager(this, 8);
+	private ScoreManager scorekeeper = new ScoreManager(this);
 	private KonamiCode konami = new KonamiCode(this);
 	private Cheater cheater = new Cheater(this);
 	private int aliensCount;
@@ -169,8 +170,9 @@ public class Game extends Canvas {
 	/**
 	 * Notification that an alien has been killed
 	 */
-	public void notifyAlienKilled() {
+	public void notifyAlienKilled(AlienEntity killed) {
 		aliensCount--;
+		scorekeeper.alienKilled(killed.getY());
 
 		if (aliensCount == 0) {
 			notifyWin();
@@ -263,6 +265,7 @@ public class Game extends Canvas {
 			cheater.draw(g);
 
 			powerupManager.draw(g);
+			scorekeeper.draw(g);
 
 			// if we're waiting for an "any key" press then draw the 
 			// current message
