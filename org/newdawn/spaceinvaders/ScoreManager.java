@@ -8,6 +8,8 @@ import java.awt.*;
 public class ScoreManager {
     private Game game;
     private int score = 0;
+    private int restorePoint = 0;
+    private int powerupMultiplier = 1;
     private Font scoreFont = null;
 
     public ScoreManager(Game game) {
@@ -21,7 +23,11 @@ public class ScoreManager {
 
     private void addScore(int change) {
         // TODO: killstreak multiplier
-        score += change;
+        score += powerupMultiplier * change;
+    }
+
+    public void setPowerupMultiplier(int powerupMultiplier) {
+        this.powerupMultiplier = powerupMultiplier;
     }
 
     public void draw(Graphics2D g) {
@@ -38,5 +44,13 @@ public class ScoreManager {
 
         // restore the original font
         g.setFont(oldFont);
+    }
+
+    public void setRestorePoint() {
+        restorePoint = score;
+    }
+
+    public void restore() {
+        score = restorePoint;
     }
 }

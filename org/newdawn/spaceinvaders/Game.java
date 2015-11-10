@@ -117,6 +117,7 @@ public class Game extends Canvas {
 		ships.clear();
 		projectiles.clear();
 		initEntities();
+		scorekeeper.restore();
 		
 		// blank out any keyboard settings we might currently have
 		leftPressed = false;
@@ -326,10 +327,10 @@ public class Game extends Canvas {
 	}
 
 	public void startDoubleScore() {
-		// TODO: Double score mode
+		scorekeeper.setPowerupMultiplier(2);
 	}
 	public void stopDoubleScore() {
-		// TODO
+		scorekeeper.setPowerupMultiplier(1);
 	}
 
 	public void addWingman() {
