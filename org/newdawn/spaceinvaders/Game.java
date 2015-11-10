@@ -32,7 +32,7 @@ public class Game extends Canvas {
 	private Message currentMessage = null;
 	private EntityGroup<AlienEntity> aliens = new EntityGroup<>();
 	private EntityGroup<ShipEntity> ships = new EntityGroup<>();
-	private EntityGroup<Entity> projectiles = new EntityGroup<>();
+	private EntityGroup<VelocityEntity> projectiles = new EntityGroup<>();
 	private Group<Laser> lasers = new Group<>();
 	private int alienMultiplier = 1;
 	/** The entity representing the player */
@@ -181,7 +181,7 @@ public class Game extends Canvas {
 		
 		// if there are still some aliens left then they all need to get faster, so
 		// speed up all the existing aliens
-		for (Entity alien : aliens) {
+		for (AlienEntity alien : aliens) {
 			// speed up by 2%
 			alien.setHorizontalMovement(alien.getHorizontalMovement() * 1.02);
 		}
@@ -217,13 +217,13 @@ public class Game extends Canvas {
 
 			if (currentMessage == null) {
 				// cycle round asking each entity to move itself
-				for (Entity entity : aliens) {
+				for (AlienEntity entity : aliens) {
 					entity.move(alienMultiplier * delta);
 				}
-				for (Entity entity : ships) {
+				for (ShipEntity entity : ships) {
 					entity.move(delta);
 				}
-				for (Entity entity : projectiles) {
+				for (VelocityEntity entity : projectiles) {
 					entity.move(delta);
 				}
 				// brute force collisions, compare every entity against
@@ -367,7 +367,7 @@ public class Game extends Canvas {
 	public EntityGroup<ShipEntity> getShips() {
 		return ships;
 	}
-	public EntityGroup<Entity> getProjectiles() {
+	public EntityGroup<VelocityEntity> getProjectiles() {
 		return projectiles;
 	}
 

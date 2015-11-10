@@ -5,7 +5,7 @@ package org.newdawn.spaceinvaders;
  * 
  * @author Kevin Glass
  */
-public class AlienEntity extends Entity {
+public class AlienEntity extends VelocityEntity {
 	/** The speed at which the alien moves horizontally */
 	private double moveSpeed = 75;
 	/** The game in which the entity exists */

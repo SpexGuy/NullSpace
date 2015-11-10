@@ -5,7 +5,7 @@ package org.newdawn.spaceinvaders;
  * 
  * @author Kevin Glass
  */
-public class ShipEntity extends Entity {
+public class ShipEntity extends VelocityEntity {
 	/** The game in which the ship exists */
 	private Game game;
 	
