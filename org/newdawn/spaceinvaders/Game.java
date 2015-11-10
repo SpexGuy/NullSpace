@@ -7,6 +7,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * The main hook of our game. This class with both act as a manager
@@ -33,6 +35,7 @@ public class Game extends Canvas {
 	private EntityGroup<AlienEntity> aliens = new EntityGroup<>();
 	private EntityGroup<ShipEntity> ships = new EntityGroup<>();
 	private EntityGroup<Entity> projectiles = new EntityGroup<>();
+	private List<Laser> lasers = new ArrayList<>();
 	private int alienMultiplier = 1;
 	/** The entity representing the player */
 	private ShipEntity ship;
@@ -256,6 +259,11 @@ public class Game extends Canvas {
 				aliensHitEdge = false;
 			}
 
+			for (Laser l : lasers) {
+				l.draw(g);
+			}
+			lasers.clear();
+
 			cheater.draw(g);
 
 			powerupManager.draw(g);
@@ -361,6 +369,10 @@ public class Game extends Canvas {
 	}
 	public EntityGroup<Entity> getProjectiles() {
 		return projectiles;
+	}
+
+	public void addLaser(Laser laser) {
+		lasers.add(laser);
 	}
 
 	/**

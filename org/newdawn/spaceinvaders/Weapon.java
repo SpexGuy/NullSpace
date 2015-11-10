@@ -23,11 +23,10 @@ public abstract class Weapon {
 
         // if we waited long enough, create the shot entity, and record the time.
         lastFire = System.currentTimeMillis();
-        Entity shot = createShotEntity(ship);
-        game.getProjectiles().add(shot);
+        createShotEntity(ship);
     }
 
-    protected abstract Entity createShotEntity(Entity ship);
+    protected abstract void createShotEntity(Entity ship);
 }
 
 class ProjectileWeapon extends Weapon {
@@ -35,8 +34,8 @@ class ProjectileWeapon extends Weapon {
         super(game, firingInterval);
     }
     @Override
-    protected Entity createShotEntity(Entity ship) {
-        return new ShotEntity(game,"sprites/shot.gif",ship.getX()+10,ship.getY()-30, 1);
+    protected void createShotEntity(Entity ship) {
+        game.getProjectiles().add(new ShotEntity(game,"sprites/shot.gif",ship.getX()+10,ship.getY()-30, 1));
     }
 }
 
@@ -45,9 +44,8 @@ class PiercingWeapon extends Weapon {
         super(game, firingInterval);
     }
     @Override
-    protected Entity createShotEntity(Entity ship) {
-        // TODO: Piercing shots
-        return new ShotEntity(game,"sprites/drill.png",ship.getX()+10,ship.getY()-30, 5);
+    protected void createShotEntity(Entity ship) {
+        game.getProjectiles().add(new ShotEntity(game,"sprites/drill.png",ship.getX()+10,ship.getY()-30, 5));
     }
 }
 
@@ -56,8 +54,22 @@ class LaserWeapon extends Weapon {
         super(game, firingInterval);
     }
     @Override
-    protected Entity createShotEntity(Entity ship) {
+    protected void createShotEntity(Entity ship) {
         // TODO: Laser shots
-        return new ShotEntity(game,"sprites/shot.gif",ship.getX()+10,ship.getY()-30, 100);
+        int xPos = ship.getX()+10;
+
+        int bestYPos = 0;
+        AlienEntity bestAlien = null;
+        for (AlienEntity alien : game.getAliens()) {
+            int yPos = alien.getY() + alien.getHeight();
+            if (yPos > bestYPos) {
+                if (alien.getX() <= xPos && alien.getX() + alien.getWidth() > xPos) {
+                    bestYPos = yPos;
+                    bestAlien = alien;
+                }
+            }
+        }
+
+        game.addLaser(new Laser(xPos, ship.getY()-30, xPos, bestYPos, bestAlien));
     }
 }
