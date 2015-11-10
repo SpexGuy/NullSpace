@@ -15,6 +15,7 @@ public class PowerupManager {
             {'A','S','D','F','Q','W','E','R','Z','X','C','V','T','G','B'}
     };
     private static final double powerLeakage = 1.0/(8 * 60);
+    private static final Color backroundColor = new Color(0, 0, 0, 0x8F);
 
     private Game game;
     private Powerup[] powerups;
@@ -72,6 +73,9 @@ public class PowerupManager {
             retreatPage();
         }
 
+        g.setColor(backroundColor);
+        g.fillRect(0, 0, game.getWidth(), 25 + 25 + 25 + 5);
+
         g.setColor(Color.WHITE);
         g.drawRoundRect(5, 5, 20, 20, 5, 5);
         FontMetrics fm = g.getFontMetrics();
@@ -88,7 +92,7 @@ public class PowerupManager {
         g.drawRoundRect(5 + 20 + 10, 5, width, 20, 5, 5);
 
         for (int c = 0; c < numPages; c++) {
-            int x = 5 + ((game.getWidth() - 10) * (c%4))/4;
+            int x = 5 + ((game.getWidth() - 10) * (c%4))/5;
             int y = 25 * (1 + c/4) + 5;
             if (activePowerup != null) {
                 if (activePowerup == powerups[c]) {
