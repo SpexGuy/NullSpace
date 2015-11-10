@@ -31,11 +31,12 @@ public class Laser {
                 target.kill(); // This is after aliens are drawn, so the alien will still appear this frame.
             game.removeLaser(this);
         } else {
-            Stroke original = g.getStroke();
+            // I kinda like everything pulsing when the laser is fired, so I'm not restoring the stroke.
+            //Stroke original = g.getStroke();
             g.setColor(Color.RED);
             g.setStroke(new BasicStroke(5 - Math.abs(5 - frameCount)));
             g.drawLine(startX, startY, endX, endY);
-            g.setStroke(original);
+            //g.setStroke(original);
         }
     }
 }
