@@ -6,13 +6,17 @@ import java.awt.*;
  * Created by martin on 11/9/15.
  */
 public class Laser {
+    private static final int laserDuration = 10;
+    private Game game;
     private int startX;
     private int startY;
     private int endX;
     private int endY;
     private AlienEntity target;
+    private int frameCount = 0;
 
-    public Laser(int startX, int startY, int endX, int endY, AlienEntity target) {
+    public Laser(Game game, int startX, int startY, int endX, int endY, AlienEntity target) {
+        this.game = game;
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
@@ -21,10 +25,17 @@ public class Laser {
     }
 
     public void draw(Graphics2D g) {
-        if (target != null)
-            target.kill(); // This is after aliens are drawn, so the alien will still appear this frame.
-
-        g.setColor(Color.RED);
-        g.drawLine(startX, startY, endX, endY);
+        ++frameCount;
+        if (frameCount == laserDuration) {
+            if (target != null)
+                target.kill(); // This is after aliens are drawn, so the alien will still appear this frame.
+            game.removeLaser(this);
+        } else {
+            Stroke original = g.getStroke();
+            g.setColor(Color.RED);
+            g.setStroke(new BasicStroke(5 - Math.abs(5 - frameCount)));
+            g.drawLine(startX, startY, endX, endY);
+            g.setStroke(original);
+        }
     }
 }

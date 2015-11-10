@@ -7,8 +7,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * The main hook of our game. This class with both act as a manager
@@ -35,7 +33,7 @@ public class Game extends Canvas {
 	private EntityGroup<AlienEntity> aliens = new EntityGroup<>();
 	private EntityGroup<ShipEntity> ships = new EntityGroup<>();
 	private EntityGroup<Entity> projectiles = new EntityGroup<>();
-	private List<Laser> lasers = new ArrayList<>();
+	private Group<Laser> lasers = new Group<>();
 	private int alienMultiplier = 1;
 	/** The entity representing the player */
 	private ShipEntity ship;
@@ -247,6 +245,10 @@ public class Game extends Canvas {
 			for (Entity entity : projectiles) {
 				entity.draw(g);
 			}
+			for (Laser l : lasers) {
+				l.draw(g);
+			}
+			lasers.completeFrame();
 
 			// if a game event has indicated that game logic should
 			// be resolved, cycle round every entity requesting that
@@ -255,14 +257,8 @@ public class Game extends Canvas {
 				for (AlienEntity alien : aliens) {
 					alien.moveDown(alienMultiplier);
 				}
-
 				aliensHitEdge = false;
 			}
-
-			for (Laser l : lasers) {
-				l.draw(g);
-			}
-			lasers.clear();
 
 			cheater.draw(g);
 
@@ -373,6 +369,9 @@ public class Game extends Canvas {
 
 	public void addLaser(Laser laser) {
 		lasers.add(laser);
+	}
+	public void removeLaser(Laser laser) {
+		lasers.remove(laser);
 	}
 
 	/**

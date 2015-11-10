@@ -70,6 +70,6 @@ class LaserWeapon extends Weapon {
             }
         }
 
-        game.addLaser(new Laser(xPos, ship.getY()-30, xPos, bestYPos, bestAlien));
+        game.addLaser(new Laser(game, xPos, ship.getY()-30, xPos, bestYPos, bestAlien));
     }
 }
