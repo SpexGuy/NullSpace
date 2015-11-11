@@ -26,7 +26,7 @@ public abstract class VelocityEntity extends Entity {
      *
      * @param delta The ammount of time that has passed in milliseconds
      */
-    public void move(long delta) {
+    public void update(int delta) {
         // update the location of the entity based on move speeds
         x += (delta * dx) / 1000;
         y += (delta * dy) / 1000;

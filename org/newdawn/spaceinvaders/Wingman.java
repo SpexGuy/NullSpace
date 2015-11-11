@@ -31,24 +31,27 @@ public class Wingman extends Entity {
         this.ship = ship;
     }
 
-    @Override
-    public void draw(Graphics g) {
+    public void update(int dt) {
         switch(mode) {
             case ENTERING:
-                if (height < maxHeight) {
-                    ++height;
-                } else {
+                height += dt;
+                if (height >= maxHeight) {
+                    height = maxHeight;
                     mode = Mode.ACTIVE;
                 }
                 break;
             case LEAVING:
-                if (height > 0) {
-                    --height;
-                } else {
+                height -= dt;
+                if (height <= 0) {
+                    height = 0;
                     mode = Mode.INACTIVE;
                 }
                 break;
         }
+    }
+
+    @Override
+    public void draw(Graphics g) {
         this.x = ship.getX() + offset;
         this.y = game.getHeight() - (game.getHeight() - 550) * height / maxHeight;
 

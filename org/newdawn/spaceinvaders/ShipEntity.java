@@ -30,7 +30,7 @@ public class ShipEntity extends VelocityEntity {
 	 * @param delta The time that has elapsed since last move (ms)
 	 */
 	@Override
-	public void move(long delta) {
+	public void update(int delta) {
 		// if we're moving left and have reached the left hand side
 		// of the screen, don't move
 		if ((dx < 0) && (x < 10)) {
@@ -42,7 +42,7 @@ public class ShipEntity extends VelocityEntity {
 			return;
 		}
 		
-		super.move(delta);
+		super.update(delta);
 	}
 	
 	/**

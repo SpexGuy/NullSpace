@@ -34,7 +34,7 @@ public class AlienEntity extends VelocityEntity {
 	 * @param delta The time that has elapsed since last move
 	 */
 	@Override
-	public void move(long delta) {
+	public void update(int delta) {
 		// if we have reached the left hand side of the screen and
 		// are moving left then request a logic update 
 		if ((dx < 0 ^ delta < 0) && (x < 10)) {
@@ -47,7 +47,7 @@ public class AlienEntity extends VelocityEntity {
 		}
 		
 		// proceed with normal move
-		super.move(delta);
+		super.update(delta);
 	}
 
 	/**

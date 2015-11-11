@@ -30,6 +30,10 @@ public class ScoreManager {
         this.powerupMultiplier = powerupMultiplier;
     }
 
+    public void update(int dt) {
+
+    }
+
     public void draw(Graphics2D g) {
         Font oldFont = g.getFont();
         if (scoreFont == null) {

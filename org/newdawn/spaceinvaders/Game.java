@@ -208,7 +208,8 @@ public class Game extends Canvas {
 			// work out how long its been since the last update, this
 			// will be used to calculate how far the entities should
 			// move this loop
-			long delta = System.currentTimeMillis() - lastLoopTime;
+			// It better not be over 2^31 ms.
+			int delta = (int) (System.currentTimeMillis() - lastLoopTime);
 			lastLoopTime = System.currentTimeMillis();
 			
 			// Get hold of a graphics context for the accelerated 
@@ -220,12 +221,20 @@ public class Game extends Canvas {
 			if (currentMessage == null) {
 				// cycle round asking each entity to move itself
 				for (AlienEntity entity : aliens) {
-					entity.move(alienMultiplier * delta);
+					entity.update(alienMultiplier * delta);
 				}
-				ship.move(delta);
+				ship.update(delta);
+				wingman.update(delta);
 				for (VelocityEntity entity : projectiles) {
-					entity.move(delta);
+					entity.update(delta);
 				}
+				cheater.update(delta);
+				for (Laser laser : lasers) {
+					laser.update(delta);
+				}
+				powerupManager.update(delta);
+				scorekeeper.update(delta);
+
 				// brute force collisions, compare every entity against
 				// every other entity. If any of them collide notify
 				// both entities that the collision has occured
@@ -236,6 +245,9 @@ public class Game extends Canvas {
 				aliens.completeFrame();
 				ships.completeFrame();
 				projectiles.completeFrame();
+				lasers.completeFrame();
+			} else {
+				currentMessage.update(delta);
 			}
 
 			// cycle round drawing all the entities we have in the game
@@ -250,7 +262,6 @@ public class Game extends Canvas {
 			for (Laser l : lasers) {
 				l.draw(g);
 			}
-			lasers.completeFrame();
 
 			// if a game event has indicated that game logic should
 			// be resolved, cycle round every entity requesting that

@@ -35,9 +35,9 @@ public class ShotEntity extends VelocityEntity {
 	 * @param delta The time that has elapsed since last move
 	 */
 	@Override
-	public void move(long delta) {
+	public void update(int delta) {
 		// proceed with normal move
-		super.move(delta);
+		super.update(delta);
 		
 		// if we shot off the screen, remove ourselfs
 		if (y < -100) {

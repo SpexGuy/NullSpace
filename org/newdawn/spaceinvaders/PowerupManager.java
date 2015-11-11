@@ -6,7 +6,7 @@ import java.awt.*;
  * Created by martin on 11/8/15.
  */
 public class PowerupManager {
-    private static final int flashDuration = 20;
+    private static final int flashDuration = 200;
     private static final int flashIntensity = 0x7F;
     private static final char[][] levels = {
             {'A','S','D','F'},
@@ -14,8 +14,8 @@ public class PowerupManager {
             {'A','S','D','F','Q','W','E','R','Z','X','C','V'},
             {'A','S','D','F','Q','W','E','R','Z','X','C','V','T','G','B'}
     };
-    private static final double powerLeakage = 1.0/(8 * 60);
-    private static final Color backroundColor = new Color(0, 0, 0, 0x8F);
+    private static final double powerLeakage = 1.0/(10 * 8 * 60);
+    private static final Color backgroundColor = new Color(0, 0, 0, 0x8F);
 
     private Game game;
     private Powerup[] powerups;
@@ -67,13 +67,16 @@ public class PowerupManager {
         } while (target == oldTarget);
     }
 
-    public void draw(Graphics2D g) {
-        pageScore -= powerLeakage;
+    public void update(int dt) {
+        flashCounter = Math.max(0, flashCounter - dt);
+        pageScore -= powerLeakage * dt;
         if (pageScore < 0.0) {
             retreatPage();
         }
+    }
 
-        g.setColor(backroundColor);
+    public void draw(Graphics2D g) {
+        g.setColor(backgroundColor);
         g.fillRect(0, 0, game.getWidth(), 25 + 25 + 25 + 5);
 
         g.setColor(Color.WHITE);
@@ -116,7 +119,6 @@ public class PowerupManager {
             int alpha = (flashIntensity*flashCounter) / flashDuration;
             g.setColor(new Color(255, 0, 0, alpha));
             g.fillRect(0, 0, game.getWidth(), game.getHeight());
-            --flashCounter;
         }
     }
 

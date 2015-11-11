@@ -8,7 +8,7 @@ import java.awt.*;
  * Created by martin on 11/7/15.
  */
 public class Message {
-    private static final int MAX_FADE = 30;
+    private static final int MAX_FADE = 300;
     private enum Mode {
         FADE_IN,
         FADE_OUT
@@ -38,20 +38,23 @@ public class Message {
         mode = Mode.FADE_IN;
         fade = -MAX_FADE;
     }
-    public void draw(Graphics2D g) {
+
+    public void update(int dt) {
         switch(mode) {
             case FADE_IN:
-                if (fade < 0)
-                    ++fade;
+                fade += dt;
+                if (fade >= 0)
+                    fade = 0;
                 break;
             case FADE_OUT:
-                if (fade < MAX_FADE)
-                    ++fade;
-                else
+                fade += dt;
+                if (fade >= MAX_FADE)
                     finish();
                 break;
         }
+    }
 
+    public void draw(Graphics2D g) {
         //TODO: draw message with the current fade
         int centerX = 800+(800*fade/MAX_FADE); // (between 0 and 1600)
         g.setColor(Color.white);

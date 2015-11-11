@@ -13,12 +13,12 @@ public class Cheater {
         SHOWING,
         DISAPPEARING
     }
-    private static final int appearFrames = 50;
-    private static final int showFrames = 240;
+    private static final int appearTime = 500;
+    private static final int showTime = 2400;
 
     private Game game;
     Mode mode = Mode.HIDDEN;
-    private int counter = appearFrames;
+    private int counter = appearTime;
 
     public Cheater(Game game) {
         this.game = game;
@@ -26,39 +26,40 @@ public class Cheater {
 
     public void activate() {
         mode = Mode.APPEARING;
-        counter = Math.min(appearFrames, counter);
+        counter = Math.min(appearTime, counter);
+    }
+
+    public void update(int dt) {
+        switch(mode) {
+            case APPEARING:
+                counter -= dt;
+                if (counter <= 0) {
+                    mode = Mode.SHOWING;
+                    counter = showTime;
+                }
+                break;
+            case DISAPPEARING:
+                counter += dt;
+                if (counter >= appearTime) {
+                    counter = appearTime;
+                    mode = Mode.HIDDEN;
+                }
+                break;
+            case SHOWING:
+                counter -= dt;
+                if (counter <= 0) {
+                    counter = 0;
+                    mode = Mode.DISAPPEARING;
+                }
+                break;
+        }
     }
 
     public void draw(Graphics2D g) {
         switch(mode) {
             case APPEARING:
-                if (counter > 0) {
-                    --counter;
-                } else {
-                    mode = Mode.SHOWING;
-                    counter = showFrames;
-                }
-                break;
             case DISAPPEARING:
-                if (counter < appearFrames) {
-                    ++counter;
-                } else {
-                    mode = Mode.HIDDEN;
-                }
-                break;
-            case SHOWING:
-                if (counter > 0) {
-                    --counter;
-                } else {
-                    mode = Mode.DISAPPEARING;
-                }
-                break;
-        }
-
-        switch(mode) {
-            case APPEARING:
-            case DISAPPEARING:
-                raptor.draw(g, game.getWidth() - raptor.getWidth(), game.getHeight() - raptor.getHeight() + raptor.getHeight() * counter / appearFrames);
+                raptor.draw(g, game.getWidth() - raptor.getWidth(), game.getHeight() - raptor.getHeight() + raptor.getHeight() * counter / appearTime);
                 break;
             case SHOWING:
                 raptor.draw(g, game.getWidth() - raptor.getWidth(), game.getHeight() - raptor.getHeight());
