@@ -37,4 +37,8 @@ public class Group<T> implements Iterable<T> {
         entities.clear();
         toRemove.clear();
     }
+
+    public T getRandom() {
+        return entities.get((int)(Math.random() * entities.size()));
+    }
 }

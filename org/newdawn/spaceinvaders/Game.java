@@ -259,6 +259,7 @@ public class Game extends Canvas {
 			for (Entity entity : projectiles) {
 				entity.draw(g);
 			}
+			cheater.draw(g);
 			for (Laser l : lasers) {
 				l.draw(g);
 			}
@@ -272,8 +273,6 @@ public class Game extends Canvas {
 				}
 				aliensHitEdge = false;
 			}
-
-			cheater.draw(g);
 
 			powerupManager.draw(g);
 			scorekeeper.draw(g);
