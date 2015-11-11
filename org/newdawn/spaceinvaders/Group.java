@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by martin on 11/10/15.
+ * A Group is an iterable object which offers safe removal* (via remove()) during iteration.
+ *
+ * *items are not actually removed until completeFrame() is called.
  */
 public class Group<T> implements Iterable<T> {
     protected List<T> entities = new ArrayList<>();

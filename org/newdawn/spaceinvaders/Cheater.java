@@ -3,7 +3,8 @@ package org.newdawn.spaceinvaders;
 import java.awt.*;
 
 /**
- * Created by martin on 11/9/15.
+ * A surprise helper to be revealed when the konami code is entered
+ * Nobody knows what it is, or where it came from, but it's here to help!
  */
 public class Cheater {
     private static final Sprite raptor = SpriteStore.get().getSprite("sprites/vogue_raptor.png");

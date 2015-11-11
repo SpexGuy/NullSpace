@@ -59,14 +59,15 @@ public class SpriteStore {
 			
 			if (url == null) {
 				fail("Can't find ref: "+ref);
+			} else {
+				// use ImageIO to read the image in
+				sourceImage = ImageIO.read(url);
 			}
-			
-			// use ImageIO to read the image in
-			sourceImage = ImageIO.read(url);
 		} catch (IOException e) {
 			fail("Failed to load: "+ref);
 		}
-		
+
+		assert(sourceImage != null);
 		// create an accelerated image of the right size to store our sprite in
 		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
 		Image image = gc.createCompatibleImage(sourceImage.getWidth(),sourceImage.getHeight(),Transparency.BITMASK);

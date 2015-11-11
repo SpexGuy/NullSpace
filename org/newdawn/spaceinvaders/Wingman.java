@@ -3,7 +3,8 @@ package org.newdawn.spaceinvaders;
 import java.awt.*;
 
 /**
- * Created by martin on 11/10/15.
+ * The Wingman is an entity which exists throughout the duration of
+ * the level and may be periodically activated by the powerup.
  */
 public class Wingman extends Entity {
     private static final int offset = 35;

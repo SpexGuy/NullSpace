@@ -3,7 +3,8 @@ package org.newdawn.spaceinvaders;
 import java.awt.*;
 
 /**
- * Created by martin on 11/9/15.
+ * A Powerup is a simple layer of indirection around activate() and deactivate().
+ * It makes the PowerupManager more configurable and simpler by abstracting the specifics.
  */
 public abstract class Powerup {
     protected Game game;

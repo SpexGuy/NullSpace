@@ -7,7 +7,7 @@ package org.newdawn.spaceinvaders;
  */
 public class AlienEntity extends VelocityEntity {
 	/** The speed at which the alien moves horizontally */
-	private double moveSpeed = 75;
+	private static final double moveSpeed = 75;
 	/** The game in which the entity exists */
 	private Game game;
 
@@ -18,8 +18,8 @@ public class AlienEntity extends VelocityEntity {
 	 * 
 	 * @param game The game in which this entity is being created
 	 * @param ref The sprite which should be displayed for this alien
-	 * @param x The intial x location of this alien
-	 * @param y The intial y location of this alient
+	 * @param x The initial x location of this alien
+	 * @param y The initial y location of this alien
 	 */
 	public AlienEntity(Game game,String ref,int x,int y) {
 		super(ref,x,y);
@@ -40,7 +40,7 @@ public class AlienEntity extends VelocityEntity {
 		if ((dx < 0 ^ delta < 0) && (x < 10)) {
 			game.alienHitEdge();
 		}
-		// and vice vesa, if we have reached the right hand side of 
+		// and vice versa, if we have reached the right hand side of
 		// the screen and are moving right, request a logic update
 		if ((dx > 0 ^ delta < 0) && (x > 750)) {
 			game.alienHitEdge();

@@ -18,13 +18,13 @@ import java.awt.image.BufferStrategy;
  * will also allow the player to control the main ship.
  * 
  * As a mediator it will be informed when entities within our game
- * detect events (e.g. alient killed, played died) and will take
+ * detect events (e.g. alien killed, player died) and will take
  * appropriate game actions.
- * 
+ *
  * @author Kevin Glass
  */
 public class Game extends Canvas {
-	/** The stragey that allows us to use accelerate page flipping */
+	/** The strategy that allows us to use accelerated page flipping */
 	private BufferStrategy strategy;
 
 	/** True if the game is currently "running", i.e. the game loop is looping */
@@ -39,7 +39,7 @@ public class Game extends Canvas {
 	private ShipEntity ship;
 	private Wingman wingman;
 	/** The speed at which the player's ship should move (pixels/sec) */
-	private double moveSpeed = 300;
+	private static final double moveSpeed = 300;
 	private final Weapon defaultWeapon = new ProjectileWeapon(this, 500);
 	private Weapon weapon = defaultWeapon;
 	private PowerupManager powerupManager = new PowerupManager(this, 8);
@@ -113,7 +113,7 @@ public class Game extends Canvas {
 	 * create a new set.
 	 */
 	private void startGame() {
-		// clear out any existing entities and intialise a new set
+		// clear out any existing entities and initialise a new set
 		aliens.clear();
 		ships.clear();
 		projectiles.clear();
@@ -128,7 +128,7 @@ public class Game extends Canvas {
 	
 	/**
 	 * Initialise the starting state of the entities (ship and aliens). Each
-	 * entitiy will be added to the overall list of entities in the game.
+	 * entity will be added to the overall list of entities in the game.
 	 */
 	private void initEntities() {
 		// create the player ship and place it roughly in the center of the screen
@@ -237,7 +237,7 @@ public class Game extends Canvas {
 
 				// brute force collisions, compare every entity against
 				// every other entity. If any of them collide notify
-				// both entities that the collision has occured
+				// both entities that the collision has occurred
 				projectiles.checkCollisions(aliens);
 				aliens.checkCollisions(ships);
 
@@ -290,7 +290,7 @@ public class Game extends Canvas {
 			
 			// resolve the movement of the ship. First assume the ship 
 			// isn't moving. If either cursor key is pressed then
-			// update the movement appropraitely
+			// update the movement appropriately
 			ship.setHorizontalMovement(0);
 			
 			if ((leftPressed) && (!rightPressed)) {
@@ -307,8 +307,9 @@ public class Game extends Canvas {
 			// finally pause for a bit. Note: this should run us at about
 			// 100 fps but on windows this might vary each loop due to
 			// a bad implementation of timer
-			try { Thread.sleep(10); } catch (Exception e) {}
+			try { Thread.sleep(10); } catch (Exception ignored) {}
 		}
+		System.exit(0);
 	}
 
 	public void setMessage(Message nextMessage) {
@@ -318,7 +319,7 @@ public class Game extends Canvas {
 
 	public void messageFinished() {
 		currentMessage = null;
-		startGame(); // TODO: better
+		startGame(); // TODO: levels
 	}
 
 	public void onCorrectCharacter() {
@@ -396,8 +397,8 @@ public class Game extends Canvas {
 	 * continue)
 	 * 
 	 * This has been implemented as an inner class more through 
-	 * habbit then anything else. Its perfectly normal to implement
-	 * this as seperate class if slight less convienient.
+	 * habit then anything else. Its perfectly normal to implement
+	 * this as separate class if slight less convenient.
 	 * 
 	 * @author Kevin Glass
 	 */
@@ -408,7 +409,7 @@ public class Game extends Canvas {
 		/**
 		 * Notification from AWT that a key has been pressed. Note that
 		 * a key being pressed is equal to being pushed down but *NOT*
-		 * released. Thats where keyTyped() comes in.
+		 * released. That's where keyTyped() comes in.
 		 *
 		 * @param e The details of the key that was pressed 
 		 */
@@ -466,13 +467,13 @@ public class Game extends Canvas {
 		 */
 		public void keyTyped(KeyEvent e) {
 			// if we're waiting for a "any key" type then
-			// check if we've recieved any recently. We may
+			// check if we've received any recently. We may
 			// have had a keyType() event from the user releasing
 			// the shoot or move keys, hence the use of the "pressCount"
 			// counter.
 			if (currentMessage != null) {
 				if (pressCount >= 1) {
-					// since we've now recieved our key typed
+					// since we've now received our key typed
 					// event we can mark it as such and start 
 					// our new game
 					currentMessage.dismiss();
@@ -484,7 +485,7 @@ public class Game extends Canvas {
 			
 			// if we hit escape, then quit the game
 			if (e.getKeyChar() == 27) {
-				System.exit(0);
+				gameRunning = false;
 			}
 		}
 	}

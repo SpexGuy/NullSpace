@@ -1,7 +1,7 @@
 package org.newdawn.spaceinvaders;
 
 /**
- * Created by martin on 11/10/15.
+ * A VelocityEntity is an Entity which moves with a semi-constant velocity.
  */
 public abstract class VelocityEntity extends Entity {
     /** The current speed of this entity horizontally (pixels/sec) */

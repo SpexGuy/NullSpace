@@ -1,20 +1,22 @@
 package org.newdawn.spaceinvaders;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 /**
- * Created by martin on 11/9/15.
+ * An EntityGroup is a Group of collision objects.
+ *
+ * EntityGroups can be used to speed up collision detection,
+ * by only checking collisions between certain groups.
  */
 public class EntityGroup<T extends Entity> extends Group<T> {
     public void checkCollisions(EntityGroup<? extends Entity> other) {
-        assert(other != this); // use checkSelfCollisions instead for this
-        for (Entity me : entities) {
-            for (Entity him : other.entities) {
-                if (me.collidesWith(him)) {
-                    me.collidedWith(him);
-                    him.collidedWith(me);
+        if (other == this) {
+            checkSelfCollisions();
+        } else {
+            for (Entity me : entities) {
+                for (Entity him : other.entities) {
+                    if (me.collidesWith(him)) {
+                        me.collidedWith(him);
+                        him.collidedWith(me);
+                    }
                 }
             }
         }

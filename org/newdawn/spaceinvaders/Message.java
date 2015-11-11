@@ -5,7 +5,6 @@ import java.awt.*;
 /**
  * A Message is a string of characters over a background.
  * It covers the whole screen, so use them sparingly.
- * Created by martin on 11/7/15.
  */
 public class Message {
     private static final int MAX_FADE = 300;

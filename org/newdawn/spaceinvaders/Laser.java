@@ -3,7 +3,7 @@ package org.newdawn.spaceinvaders;
 import java.awt.*;
 
 /**
- * Created by martin on 11/9/15.
+ * A Laser draws a flaring line to its target, and destroys it once its duration is complete.
  */
 public class Laser {
     private static final int laserDuration = 150;

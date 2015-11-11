@@ -3,7 +3,7 @@ package org.newdawn.spaceinvaders;
 import java.awt.event.KeyEvent;
 
 /**
- * Created by martin on 11/9/15.
+ * A simple class to recognize the konami code
  */
 public class KonamiCode {
     private Game game;

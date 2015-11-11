@@ -3,7 +3,8 @@ package org.newdawn.spaceinvaders;
 import java.awt.*;
 
 /**
- * Created by martin on 11/8/15.
+ * The PowerupManager manages the powerup bar and key presses to maintain it.
+ * It is in charge of activating and deactivating powerups.
  */
 public class PowerupManager {
     private static final int flashDuration = 200;

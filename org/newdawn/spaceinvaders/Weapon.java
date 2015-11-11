@@ -1,7 +1,7 @@
 package org.newdawn.spaceinvaders;
 
 /**
- * Created by martin on 11/9/15.
+ * A Weapon abstracts the concepts of reload time and projectile creation.
  */
 public abstract class Weapon {
     protected Game game;
@@ -57,7 +57,6 @@ class LaserWeapon extends Weapon {
     }
     @Override
     protected void createShotEntity(Entity ship) {
-        // TODO: Laser shots
         int xPos = ship.getX()+10;
 
         int bestYPos = 0;

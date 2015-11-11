@@ -7,7 +7,7 @@ package org.newdawn.spaceinvaders;
  */
 public class ShotEntity extends VelocityEntity {
 	/** The vertical speed at which the players shot moves */
-	private double moveSpeed = -300;
+	private static final double moveSpeed = -300;
 	/** The game in which this entity exists */
 	private Game game;
 	private int numHits;
@@ -39,7 +39,7 @@ public class ShotEntity extends VelocityEntity {
 		// proceed with normal move
 		super.update(delta);
 		
-		// if we shot off the screen, remove ourselfs
+		// if we shot off the screen, remove ourselves
 		if (y < -100) {
 			game.getProjectiles().remove(this);
 		}

@@ -3,7 +3,7 @@ package org.newdawn.spaceinvaders;
 import java.awt.*;
 
 /**
- * Created by martin on 11/10/15.
+ * The score manager keeps track of the score, current streak, and multiplier.
  */
 public class ScoreManager {
     private Game game;
