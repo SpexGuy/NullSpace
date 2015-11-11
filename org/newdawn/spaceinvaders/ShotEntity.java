@@ -62,10 +62,11 @@ public class ShotEntity extends VelocityEntity {
 		// if we've hit an alien, kill it!
 		if (other instanceof AlienEntity) {
 			// remove the affected entities
-			if (numHits == 1)
-				game.getProjectiles().remove(this);
-			((AlienEntity) other).kill();
-			--numHits;
+			if (((AlienEntity) other).kill()) {
+				if (numHits == 1)
+					game.getProjectiles().remove(this);
+				--numHits;
+			}
 		}
 	}
 }

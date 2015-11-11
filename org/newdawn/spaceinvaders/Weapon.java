@@ -15,7 +15,7 @@ public abstract class Weapon {
         this.firingInterval = firingInterval;
     }
 
-    public void tryToFire(Entity ship) {
+    public void tryToFire() {
         // check that we have waiting long enough to fire
         if (System.currentTimeMillis() - lastFire < firingInterval) {
             return;
@@ -23,7 +23,9 @@ public abstract class Weapon {
 
         // if we waited long enough, create the shot entity, and record the time.
         lastFire = System.currentTimeMillis();
-        createShotEntity(ship);
+        for (Entity ship : game.getShips()) {
+            createShotEntity(ship);
+        }
     }
 
     protected abstract void createShotEntity(Entity ship);

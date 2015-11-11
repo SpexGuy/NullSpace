@@ -31,12 +31,13 @@ public class Game extends Canvas {
 	private boolean gameRunning = true;
 	private Message currentMessage = null;
 	private EntityGroup<AlienEntity> aliens = new EntityGroup<>();
-	private EntityGroup<ShipEntity> ships = new EntityGroup<>();
+	private EntityGroup<Entity> ships = new EntityGroup<>();
 	private EntityGroup<VelocityEntity> projectiles = new EntityGroup<>();
 	private Group<Laser> lasers = new Group<>();
 	private int alienMultiplier = 1;
 	/** The entity representing the player */
 	private ShipEntity ship;
+	private Wingman wingman;
 	/** The speed at which the player's ship should move (pixels/sec) */
 	private double moveSpeed = 300;
 	private final Weapon defaultWeapon = new ProjectileWeapon(this, 500);
@@ -133,7 +134,8 @@ public class Game extends Canvas {
 		// create the player ship and place it roughly in the center of the screen
 		ship = new ShipEntity(this,"sprites/ship.gif",370,550);
 		ships.add(ship);
-		
+		wingman = new Wingman(this, ship, "sprites/ship.gif");
+
 		// create a block of aliens (5 rows, by 12 aliens, spaced evenly)
 		aliensCount = 0;
 		for (int row=0;row<5;row++) {
@@ -220,9 +222,7 @@ public class Game extends Canvas {
 				for (AlienEntity entity : aliens) {
 					entity.move(alienMultiplier * delta);
 				}
-				for (ShipEntity entity : ships) {
-					entity.move(delta);
-				}
+				ship.move(delta);
 				for (VelocityEntity entity : projectiles) {
 					entity.move(delta);
 				}
@@ -242,9 +242,8 @@ public class Game extends Canvas {
 			for (Entity entity : aliens) {
 				entity.draw(g);
 			}
-			for (Entity entity : ships) {
-				entity.draw(g);
-			}
+			ship.draw(g);
+			wingman.draw(g);
 			for (Entity entity : projectiles) {
 				entity.draw(g);
 			}
@@ -292,7 +291,7 @@ public class Game extends Canvas {
 			
 			// if we're pressing fire, attempt to fire
 			if (firePressed) {
-				weapon.tryToFire(ship);
+				weapon.tryToFire();
 			}
 			
 			// finally pause for a bit. Note: this should run us at about
@@ -334,10 +333,12 @@ public class Game extends Canvas {
 	}
 
 	public void addWingman() {
-		// TODO: Wingman
+		wingman.enter();
+		ships.add(wingman);
 	}
 	public void removeWingman() {
-		// TODO
+		ships.remove(wingman);
+		wingman.leave();
 	}
 
 	public void reverseInvaders() {
@@ -364,7 +365,7 @@ public class Game extends Canvas {
 	public EntityGroup<AlienEntity> getAliens() {
 		return aliens;
 	}
-	public EntityGroup<ShipEntity> getShips() {
+	public EntityGroup<Entity> getShips() {
 		return ships;
 	}
 	public EntityGroup<VelocityEntity> getProjectiles() {

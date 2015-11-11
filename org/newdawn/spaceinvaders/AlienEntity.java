@@ -10,6 +10,8 @@ public class AlienEntity extends VelocityEntity {
 	private double moveSpeed = 75;
 	/** The game in which the entity exists */
 	private Game game;
+
+	private boolean dead = false;
 	
 	/**
 	 * Create a new alien entity
@@ -64,9 +66,14 @@ public class AlienEntity extends VelocityEntity {
 		}
 	}
 
-	public void kill() {
+	public boolean kill() {
+		if (dead)
+			return false;
+		dead = true;
+
 		game.getAliens().remove(this);
 		game.notifyAlienKilled(this);
+		return true;
 	}
 	
 	/**
