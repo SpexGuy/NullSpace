@@ -26,7 +26,7 @@ public class Cheater {
 
     private Game game;
     private Mode mode = Mode.HIDDEN;
-    private int visibility = appearTime;
+    private int height = appearTime;
     private int shotTimeRemaining = 0;
     private int anger = 0;
 
@@ -41,9 +41,9 @@ public class Cheater {
     public void update(int dt) {
         switch(mode) {
             case APPEARING:
-                visibility -= dt;
-                if (visibility <= 0) {
-                    visibility = 0;
+                height -= dt;
+                if (height <= 0) {
+                    height = 0;
                     mode = Mode.AGITATING;
                 }
                 break;
@@ -73,9 +73,9 @@ public class Cheater {
                 }
                 break;
             case DISAPPEARING:
-                visibility += dt;
-                if (visibility >= appearTime) {
-                    visibility = appearTime;
+                height += dt;
+                if (height >= appearTime) {
+                    height = appearTime;
                     mode = Mode.HIDDEN;
                 }
                 break;
@@ -92,7 +92,7 @@ public class Cheater {
     }
 
     public void draw(Graphics2D g) {
-        raptor.draw(g, game.getWidth() - raptor.getWidth(), game.getHeight() - raptor.getHeight() + raptor.getHeight() * visibility / appearTime);
+        raptor.draw(g, game.getWidth() - raptor.getWidth(), game.getHeight() - raptor.getHeight() + raptor.getHeight() * height / appearTime);
         int radius = eyeRadius * anger / angerTime;
         if (radius > 0) {
             g.setColor(eyeColor);
