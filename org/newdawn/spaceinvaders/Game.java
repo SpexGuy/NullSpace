@@ -46,7 +46,14 @@ public class Game extends Canvas {
 	private ScoreManager scorekeeper = new ScoreManager(this);
 	private KonamiCode konami = new KonamiCode(this);
 	private Cheater cheater = new Cheater(this);
-	private int aliensCount;
+
+	private Level[] levels = {
+			new Level1(this),
+			new Level2(this),
+			new Level3(this),
+			new Level4(this)
+	};
+	private int currentLevel = 0;
 
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
@@ -136,15 +143,7 @@ public class Game extends Canvas {
 		ships.add(ship);
 		wingman = new Wingman(this, ship, "sprites/ship.gif");
 
-		// create a block of aliens (5 rows, by 12 aliens, spaced evenly)
-		aliensCount = 0;
-		for (int row=0;row<5;row++) {
-			for (int x=0;x<12;x++) {
-				AlienEntity alien = new AlienEntity(this,"sprites/alien.gif",100+(x*50),(50)+row*30);
-				aliens.add(alien);
-				aliensCount++;
-			}
-		}
+		levels[currentLevel].initEntities();
 	}
 	
 	/**
@@ -167,20 +166,17 @@ public class Game extends Canvas {
 	 * are dead.
 	 */
 	public void notifyWin() {
-		setMessage(new Message(this, "Well done! You Win!"));
+		scorekeeper.setRestorePoint();
+		setMessage(levels[currentLevel].win());
+		currentLevel = (currentLevel + 1) % levels.length;
 	}
 	
 	/**
 	 * Notification that an alien has been killed
 	 */
 	public void notifyAlienKilled(AlienEntity killed) {
-		aliensCount--;
 		scorekeeper.alienKilled(killed.getY());
 
-		if (aliensCount == 0) {
-			notifyWin();
-		}
-		
 		// if there are still some aliens left then they all need to get faster, so
 		// speed up all the existing aliens
 		for (AlienEntity alien : aliens) {
@@ -211,14 +207,19 @@ public class Game extends Canvas {
 			// It better not be over 2^31 ms.
 			int delta = (int) (System.currentTimeMillis() - lastLoopTime);
 			lastLoopTime = System.currentTimeMillis();
-			
-			// Get hold of a graphics context for the accelerated 
+
+			// Get hold of a graphics context for the accelerated
 			// surface and blank it out
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
 			g.setColor(Color.black);
 			g.fillRect(0,0,800,600);
 
 			if (currentMessage == null) {
+				if (aliens.size() == 0) {
+					notifyWin();
+					continue;
+				}
+
 				// cycle round asking each entity to move itself
 				for (AlienEntity entity : aliens) {
 					entity.update(alienMultiplier * delta);
@@ -319,7 +320,7 @@ public class Game extends Canvas {
 
 	public void messageFinished() {
 		currentMessage = null;
-		startGame(); // TODO: levels
+		startGame();
 	}
 
 	public void onCorrectCharacter() {

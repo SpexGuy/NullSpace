@@ -21,6 +21,8 @@ public abstract class Entity {
 	protected double x;
 	/** The current y location of this entity */
 	protected double y;
+	/** The current size multiplier of this entity */
+	protected double scale;
 	/** The sprite that represents this entity */
 	protected Sprite sprite;
 	/** The rectangle used for this entity during collisions  resolution */
@@ -34,11 +36,16 @@ public abstract class Entity {
 	 * @param ref The reference to the image to be displayed for this entity
  	 * @param x The initial x location of this entity
 	 * @param y The initial y location of this entity
+	 * @param scale the scale of this entity (default 1.0)
 	 */
-	public Entity(String ref,int x,int y) {
+	public Entity(String ref,int x,int y,double scale) {
 		this.sprite = SpriteStore.get().getSprite(ref);
 		this.x = x;
 		this.y = y;
+		this.scale = scale;
+	}
+	public Entity(String ref, int x, int y) {
+		this(ref, x, y, 1.0);
 	}
 
 	public abstract void update(int dt);
@@ -49,7 +56,7 @@ public abstract class Entity {
 	 * @param g The graphics context on which to draw
 	 */
 	public void draw(Graphics g) {
-		sprite.draw(g,(int) x,(int) y);
+		sprite.draw(g,(int) x,(int) y, scale);
 	}
 
 	

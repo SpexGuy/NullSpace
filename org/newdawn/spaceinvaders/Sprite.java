@@ -50,7 +50,7 @@ public class Sprite {
 	 * @param x The x location at which to draw the sprite
 	 * @param y The y location at which to draw the sprite
 	 */
-	public void draw(Graphics g,int x,int y) {
-		g.drawImage(image,x,y,null);
+	public void draw(Graphics g,int x,int y,double scale) {
+		g.drawImage(image,x,y,(int)(getWidth()*scale),(int)(getHeight()*scale),null);
 	}
 }

@@ -4,15 +4,15 @@ import java.awt.*;
 
 /**
  * A surprise helper to be revealed when the konami code is entered
- * Nobody knows what it is, or where it came from, but it's here to help!
+ * Nobody knows what it is, or where it came from, or where it got that stylish hat, but it's here to help!
  */
 public class Cheater {
     private static final Sprite raptor = SpriteStore.get().getSprite("sprites/vogue_raptor.png");
     private enum Mode {
-        HIDDEN,
+        INACTIVE,
         APPEARING,
         AGITATING,
-        SHOWING,
+        ACTIVE,
         CALMING,
         DISAPPEARING
     }
@@ -25,7 +25,7 @@ public class Cheater {
     private static final Color eyeColor = new Color(1.0f, 0.0f, 0.0f, 0.9f);
 
     private Game game;
-    private Mode mode = Mode.HIDDEN;
+    private Mode mode = Mode.INACTIVE;
     private int height = appearTime;
     private int shotTimeRemaining = 0;
     private int anger = 0;
@@ -51,11 +51,11 @@ public class Cheater {
                 anger += dt;
                 if (anger >= angerTime) {
                     anger = angerTime;
-                    mode = Mode.SHOWING;
+                    mode = Mode.ACTIVE;
                     fire();
                 }
                 break;
-            case SHOWING:
+            case ACTIVE:
                 shotTimeRemaining -= dt;
                 if (shotTimeRemaining <= 0) {
                     if (game.getAliens().size() <= 1) {
@@ -76,7 +76,7 @@ public class Cheater {
                 height += dt;
                 if (height >= appearTime) {
                     height = appearTime;
-                    mode = Mode.HIDDEN;
+                    mode = Mode.INACTIVE;
                 }
                 break;
         }
@@ -92,7 +92,7 @@ public class Cheater {
     }
 
     public void draw(Graphics2D g) {
-        raptor.draw(g, game.getWidth() - raptor.getWidth(), game.getHeight() - raptor.getHeight() + raptor.getHeight() * height / appearTime);
+        raptor.draw(g, game.getWidth() - raptor.getWidth(), game.getHeight() - raptor.getHeight() + raptor.getHeight() * height / appearTime, 1.0);
         int radius = eyeRadius * anger / angerTime;
         if (radius > 0) {
             g.setColor(eyeColor);
