@@ -69,10 +69,16 @@ public class PowerupManager {
 
     public void update(int dt) {
         flashCounter = Math.max(0, flashCounter - dt);
-        pageScore -= powerLeakage * dt;
+        pageScore -= getPowerLeakage() * dt;
         if (pageScore < 0.0) {
             retreatPage();
         }
+    }
+
+    private double getPowerLeakage() {
+        if (activePowerup != null)
+            return activePowerup.getLeakageRate();
+        return powerLeakage;
     }
 
     public void draw(Graphics2D g) {
