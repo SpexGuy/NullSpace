@@ -54,7 +54,7 @@ public class Game extends Canvas {
 			new Level3(this),
 			new Level4(this)
 	};
-	private int currentLevel = 3;
+	private int currentLevel = 0;
 
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
@@ -114,6 +114,9 @@ public class Game extends Canvas {
 		
 		// initialise the entities in our game so there's something
 		// to see at startup
+		ship = new ShipEntity(this,"sprites/ship.gif",370,550);
+		wingman = new Wingman(this, ship, "sprites/ship.gif");
+		paddle = new ShipEntity(this, "sprites/paddle.png", 0, 0);
 		initEntities();
 		currentMessage = new Message(this, "Welcome to NullSpace!",
 						 new Message(this, "Hold the spacebar to fire, and use the arrow keys to move.",
@@ -150,10 +153,13 @@ public class Game extends Canvas {
 	 */
 	private void initEntities() {
 		// create the player ship and place it roughly in the center of the screen
-		ship = new ShipEntity(this,"sprites/ship.gif",370,550);
-		ships.add(ship);
-		wingman = new Wingman(this, ship, "sprites/ship.gif");
-		paddle = new ShipEntity(this, "sprites/paddle.png", 0, 0);
+		ship.setX(370);
+		ship.setY(550);
+		if (breakoutMode) {
+			ships.add(paddle);
+		} else {
+			ships.add(ship);
+		}
 
 		levels[currentLevel].initEntities();
 		aliens.completeFrame();
