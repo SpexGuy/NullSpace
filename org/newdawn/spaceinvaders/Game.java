@@ -127,6 +127,8 @@ public class Game extends Canvas {
 		projectiles.clear();
 		initEntities();
 		scorekeeper.restore();
+		powerupManager.setLevelNumber(currentLevel);
+		powerupManager.setNumPages((currentLevel+1)*2);
 		
 		// blank out any keyboard settings we might currently have
 		leftPressed = false;
