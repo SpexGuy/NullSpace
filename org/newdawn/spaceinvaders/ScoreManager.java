@@ -22,7 +22,6 @@ public class ScoreManager {
     }
 
     private void addScore(int change) {
-        // TODO: killstreak multiplier
         score += powerupMultiplier * change;
     }
 

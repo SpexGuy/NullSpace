@@ -14,7 +14,7 @@ public class PowerupManager {
             {'A','S','D','F','W','E','X','C'},
             {'A','S','D','F','W','E','X','C'}
     };
-    private static final double powerLeakage = 1.0/(10 * 8 * 60);
+    private static final double powerLeakage = 1.0 / 3000;
     private static final Color backgroundColor = new Color(0, 0, 0, 0x8F);
 
     private Game game;
@@ -29,6 +29,7 @@ public class PowerupManager {
     private int streakCount = 0;
     private char target;
     private Powerup activePowerup = null;
+    private int activePowerupTime = 0;
 
     public PowerupManager(Game game, int numPages) {
         this.game = game;
@@ -36,14 +37,14 @@ public class PowerupManager {
         assert(numPages <= powerups.length);
         this.numPages = numPages;
         this.powerups = new Powerup[] {
-                new WeaponPowerup(game, Color.BLUE, powerLeakage, new ProjectileWeapon(game, 250), "Fast Reload"),
-                new DoubleScorePowerup(game, Color.CYAN, powerLeakage),
-                new WingmanPowerup(game, Color.GREEN, powerLeakage),
-                new PausePowerup(game, Color.YELLOW, powerLeakage),
-                new WeaponPowerup(game, Color.ORANGE, powerLeakage, new PiercingWeapon(game, 500), "Piercing Shots"),
-                new BackInTimePowerup(game, Color.RED, powerLeakage),
-                new WeaponPowerup(game, Color.MAGENTA, powerLeakage, new LaserWeapon(game, 500), "Laser"),
-                new BreakoutPowerup(game, new Color(0x7F00FF), powerLeakage)
+                new WeaponPowerup(game, Color.BLUE, "Fast Reload", new ProjectileWeapon(game, 250), 1/3.0, 5000, 4000),
+                new DoubleScorePowerup(game, Color.CYAN, 1/4.0, 10000, 10000),
+                new WingmanPowerup(game, Color.GREEN, 1/5.0, 10000, 10000),
+                new PausePowerup(game, Color.YELLOW, 1/6.0, 6000, 4000),
+                new WeaponPowerup(game, Color.ORANGE, "Piercing Shots", new PiercingWeapon(game, 500), 1/7.0, 4000, 4000),
+                new BackInTimePowerup(game, Color.RED, 1/8.0, 6000, 3000),
+                new WeaponPowerup(game, Color.MAGENTA, "Laser", new LaserWeapon(game, 500), 1/9.0, 5000, 6000),
+                new BreakoutPowerup(game, new Color(0x7F00FF), 1/10.0, 20000, 15000)
         };
         setTargetCharacter();
     }
@@ -69,6 +70,7 @@ public class PowerupManager {
     }
 
     public void update(int dt) {
+        activePowerupTime += dt;
         flashCounter = Math.max(0, flashCounter - dt);
         pageScore -= getPowerLeakage() * dt;
         if (pageScore < 0.0) {
@@ -161,6 +163,7 @@ public class PowerupManager {
 
     private void activatePowerup(int index) {
         activePowerup = powerups[index];
+        activePowerupTime = 0;
         activePowerup.activate();
         if (index < pageNumber) {
             pageScore = 1.0;
@@ -180,7 +183,7 @@ public class PowerupManager {
     }
 
     private void onCorrectCharacter() {
-        double charScore = getMultiplier() / getDifficulty();
+        double charScore = getMultiplier() * getPower();
         streakCount++;
         pageScore += charScore;
         if (pageScore >= 1.0) {
@@ -189,8 +192,10 @@ public class PowerupManager {
         setTargetCharacter();
     }
 
-    private double getDifficulty() {
-        return 3 + pageNumber;
+    private double getPower() {
+        if (activePowerup != null)
+            return activePowerup.getPower(activePowerupTime);
+        return 1.0 / (3 + pageNumber);
     }
 
     private double getMultiplier() {
@@ -204,9 +209,9 @@ public class PowerupManager {
         } else {
             // Reset pageScore, then scale remainder to new difficulty.
             pageScore -= 1.0;
-            pageScore *= getDifficulty();
+            pageScore /= getPower();
             pageNumber++;
-            pageScore /= getDifficulty();
+            pageScore *= getPower();
         }
     }
 

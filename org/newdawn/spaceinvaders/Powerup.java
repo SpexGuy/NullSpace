@@ -9,14 +9,18 @@ import java.awt.*;
 public abstract class Powerup {
     protected Game game;
     private Color color;
-    private double leakageRate;
     private String name;
+    private double leakageRate;
+    private double startPowerPerPress;
+    private double lambda; // exponential falloff control
 
-    public Powerup(Game game, Color color, double leakageRate, String name) {
+    public Powerup(Game game, Color color, String name, double startPowerPerPress, int inactiveDuration, int extraDuration) {
         this.game = game;
         this.color = color;
-        this.leakageRate = leakageRate;
         this.name = name;
+        this.leakageRate = 1.0 / inactiveDuration;
+        this.startPowerPerPress = startPowerPerPress;
+        this.lambda = Math.log(500.0 / (inactiveDuration * startPowerPerPress)) / extraDuration;
     }
 
     public abstract void activate();
@@ -26,6 +30,9 @@ public abstract class Powerup {
         return color;
     }
 
+    public double getPower(int elapsedTime) {
+        return startPowerPerPress * Math.exp(lambda * elapsedTime);
+    }
     public double getLeakageRate() {
         return leakageRate;
     }
@@ -37,10 +44,12 @@ public abstract class Powerup {
 
 class WeaponPowerup extends Powerup {
     private Weapon weapon;
-    public WeaponPowerup(Game game, Color color, double leakageRate, Weapon weapon, String name) {
-        super(game, color, leakageRate, name);
+
+    public WeaponPowerup(Game game, Color color, String name, Weapon weapon, double startPowerPerPress, int inactiveDuration, int extraDuration) {
+        super(game, color, name, startPowerPerPress, inactiveDuration, extraDuration);
         this.weapon = weapon;
     }
+
     @Override
     public void activate() {
         game.setWeapon(weapon);
@@ -52,8 +61,8 @@ class WeaponPowerup extends Powerup {
 }
 
 class DoubleScorePowerup extends Powerup {
-    public DoubleScorePowerup(Game game, Color color, double leakageRate) {
-        super(game, color, leakageRate, "Double Score");
+    public DoubleScorePowerup(Game game, Color color, double startPowerPerPress, int inactiveDuration, int extraDuration) {
+        super(game, color, "Double Score", startPowerPerPress, inactiveDuration, extraDuration);
     }
     @Override
     public void activate() {
@@ -66,9 +75,10 @@ class DoubleScorePowerup extends Powerup {
 }
 
 class WingmanPowerup extends Powerup {
-    public WingmanPowerup(Game game, Color color, double leakageRate) {
-        super(game, color, leakageRate, "Wingman");
+    public WingmanPowerup(Game game, Color color, double startPowerPerPress, int inactiveDuration, int extraDuration) {
+        super(game, color, "Wingman", startPowerPerPress, inactiveDuration, extraDuration);
     }
+
     @Override
     public void activate() {
         game.addWingman();
@@ -80,9 +90,10 @@ class WingmanPowerup extends Powerup {
 }
 
 class PausePowerup extends Powerup {
-    public PausePowerup(Game game, Color color, double leakageRate) {
-        super(game, color, leakageRate, "Pause");
+    public PausePowerup(Game game, Color color, double startPowerPerPress, int inactiveDuration, int extraDuration) {
+        super(game, color, "Pause Time", startPowerPerPress, inactiveDuration, extraDuration);
     }
+
     @Override
     public void activate() {
         game.pauseInvaders();
@@ -94,9 +105,10 @@ class PausePowerup extends Powerup {
 }
 
 class BackInTimePowerup extends Powerup {
-    public BackInTimePowerup(Game game, Color color, double leakageRate) {
-        super(game, color, leakageRate, "Rewind");
+    public BackInTimePowerup(Game game, Color color, double startPowerPerPress, int inactiveDuration, int extraDuration) {
+        super(game, color, "Reverse Time", startPowerPerPress, inactiveDuration, extraDuration);
     }
+
     @Override
     public void activate() {
         game.reverseInvaders();
@@ -108,9 +120,10 @@ class BackInTimePowerup extends Powerup {
 }
 
 class BreakoutPowerup extends Powerup {
-    public BreakoutPowerup(Game game, Color color, double leakageRate) {
-        super(game, color, leakageRate, "Breakout");
+    public BreakoutPowerup(Game game, Color color, double startPowerPerPress, int inactiveDuration, int extraDuration) {
+        super(game, color, "Breakout", startPowerPerPress, inactiveDuration, extraDuration);
     }
+
     @Override
     public void activate() {
         game.startBreakout();

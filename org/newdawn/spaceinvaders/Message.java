@@ -54,8 +54,7 @@ public class Message {
     }
 
     public void draw(Graphics2D g) {
-        //TODO: draw message with the current fade
-        int centerX = 800+(200*fade/MAX_FADE); // (between 0 and 1600)
+        int centerX = 800+(100*fade/MAX_FADE); // (between 0 and 1600)
         g.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f - Math.abs((float)fade) / MAX_FADE));
         g.drawString(msg,(centerX-g.getFontMetrics().stringWidth(msg))/2,250);
         g.drawString("Press any key",(centerX-g.getFontMetrics().stringWidth("Press any key"))/2,300);
