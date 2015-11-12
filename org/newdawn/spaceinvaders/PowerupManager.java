@@ -11,8 +11,8 @@ public class PowerupManager {
     private static final char[][] levels = {
             {'A','S','D','F'},
             {'A','S','D','F','W','E'},
-            {'A','S','D','F','W','E','X','C'},
-            {'A','S','D','F','W','E','X','C'}
+            {'A','S','D','F','W','E','R'},
+            {'A','S','D','F','W','E','R','T'}
     };
     private static final double powerLeakage = 1.0 / 3000;
     private static final Color backgroundColor = new Color(0, 0, 0, 0x8F);
