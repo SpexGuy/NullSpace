@@ -38,13 +38,13 @@ public abstract class Entity {
 	 * @param y The initial y location of this entity
 	 * @param scale the scale of this entity (default 1.0)
 	 */
-	public Entity(String ref,int x,int y,double scale) {
+	public Entity(String ref,double x,double y,double scale) {
 		this.sprite = SpriteStore.get().getSprite(ref);
 		this.x = x;
 		this.y = y;
 		this.scale = scale;
 	}
-	public Entity(String ref, int x, int y) {
+	public Entity(String ref, double x, double y) {
 		this(ref, x, y, 1.0);
 	}
 
@@ -79,11 +79,11 @@ public abstract class Entity {
 	}
 
 	public int getWidth() {
-		return sprite.getWidth();
+		return (int)(scale * sprite.getWidth());
 	}
 
 	public int getHeight() {
-		return sprite.getHeight();
+		return (int)(scale * sprite.getHeight());
 	}
 
 	/**
@@ -93,8 +93,8 @@ public abstract class Entity {
 	 * @return True if the entities collide with each other
 	 */
 	public boolean collidesWith(Entity other) {
-		me.setBounds((int) x,(int) y,sprite.getWidth(),sprite.getHeight());
-		him.setBounds((int) other.x,(int) other.y,other.sprite.getWidth(),other.sprite.getHeight());
+		me.setBounds((int) x,(int) y,getWidth(),getHeight());
+		him.setBounds((int) other.x,(int) other.y,other.getWidth(),other.getHeight());
 
 		return me.intersects(him);
 	}

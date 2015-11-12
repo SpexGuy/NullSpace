@@ -5,16 +5,18 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A Group is an iterable object which offers safe removal* (via remove()) during iteration.
+ * A Group is an iterable object which offers safe add and remove* (via add() and remove()) during iteration.
  *
- * *items are not actually removed until completeFrame() is called.
+ * *items are not actually added or removed until completeFrame() is called.
+ * ** completeFrame() cannot be called during iteration.
  */
 public class Group<T> implements Iterable<T> {
     protected List<T> entities = new ArrayList<>();
     protected List<T> toRemove = new ArrayList<>();
+    protected List<T> toAdd = new ArrayList<>();
 
     public void add(T entity) {
-        entities.add(entity);
+        toAdd.add(entity);
     }
 
     public void remove(T entity) {
@@ -23,7 +25,9 @@ public class Group<T> implements Iterable<T> {
 
     public void completeFrame() {
         entities.removeAll(toRemove);
+        entities.addAll(toAdd);
         toRemove.clear();
+        toAdd.clear();
     }
 
     public int size() {
@@ -38,6 +42,7 @@ public class Group<T> implements Iterable<T> {
     public void clear() {
         entities.clear();
         toRemove.clear();
+        toAdd.clear();
     }
 
     public T getRandom() {

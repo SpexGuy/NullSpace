@@ -15,8 +15,12 @@ public abstract class VelocityEntity extends Entity {
      * @param ref The reference to the image to be displayed for this entity
      * @param x   The initial x location of this entity
      * @param y   The initial y location of this entity
+     * @param scale The initial scale of this entity
      */
-    public VelocityEntity(String ref, int x, int y) {
+    public VelocityEntity(String ref, double x, double y, double scale) {
+        super(ref, x, y, scale);
+    }
+    public VelocityEntity(String ref, double x, double y) {
         super(ref, x, y);
     }
 

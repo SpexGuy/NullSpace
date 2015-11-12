@@ -12,6 +12,7 @@ public class AlienEntity extends VelocityEntity {
 	private Game game;
 
 	private boolean dead = false;
+	private int size;
 	
 	/**
 	 * Create a new alien entity
@@ -21,11 +22,12 @@ public class AlienEntity extends VelocityEntity {
 	 * @param x The initial x location of this alien
 	 * @param y The initial y location of this alien
 	 */
-	public AlienEntity(Game game,String ref,int x,int y) {
-		super(ref,x,y);
+	public AlienEntity(Game game,String ref,double x,double y, int size) {
+		super(ref, x, y, 1 << size);
 		
 		this.game = game;
 		dx = -moveSpeed;
+		this.size = size;
 	}
 
 	/**
@@ -42,7 +44,7 @@ public class AlienEntity extends VelocityEntity {
 		}
 		// and vice versa, if we have reached the right hand side of
 		// the screen and are moving right, request a logic update
-		if ((dx > 0 ^ delta < 0) && (x > 750)) {
+		if ((dx > 0 ^ delta < 0) && (x+getWidth() > 790)) {
 			game.alienHitEdge();
 		}
 		
@@ -61,7 +63,7 @@ public class AlienEntity extends VelocityEntity {
 		
 		// if we've reached the bottom of the screen then the player
 		// dies
-		if (y > 570) {
+		if (y + this.getHeight() >= 600) {
 			game.notifyDeath();
 		}
 	}
@@ -71,6 +73,18 @@ public class AlienEntity extends VelocityEntity {
 			return false;
 		dead = true;
 
+		if (size > 0) {
+			for (int c = 0; c < 2; c++) {
+				for (int d = 0; d < 2; d++) {
+					AlienEntity child = new AlienEntity(game, sprite.getRef(), x, y, size-1);
+					child.dx = dx;
+					child.dy = dy;
+					child.x += c * child.getWidth();
+					child.y += d * child.getHeight();
+					game.getAliens().add(child);
+				}
+			}
+		}
 		game.getAliens().remove(this);
 		game.notifyAlienKilled(this);
 		return true;

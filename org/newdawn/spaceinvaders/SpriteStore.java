@@ -76,7 +76,7 @@ public class SpriteStore {
 		image.getGraphics().drawImage(sourceImage,0,0,null);
 		
 		// create a sprite, add it the cache then return it
-		Sprite sprite = new Sprite(image);
+		Sprite sprite = new Sprite(image, ref);
 		sprites.put(ref,sprite);
 		
 		return sprite;

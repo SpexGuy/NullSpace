@@ -15,14 +15,18 @@ import java.awt.Image;
 public class Sprite {
 	/** The image to be drawn for this sprite */
 	private Image image;
+	/** The ref used to find this sprite in the SpriteStore */
+	private String ref;
 	
 	/**
 	 * Create a new sprite based on an image
 	 * 
 	 * @param image The image that is this sprite
 	 */
-	public Sprite(Image image) {
+	public Sprite(Image image, String ref) {
 		this.image = image;
+		this.ref = ref;
+		System.out.println("Loaded "+ref+" at ("+getWidth()+"x"+getHeight()+")");
 	}
 	
 	/**
@@ -52,5 +56,9 @@ public class Sprite {
 	 */
 	public void draw(Graphics g,int x,int y,double scale) {
 		g.drawImage(image,x,y,(int)(getWidth()*scale),(int)(getHeight()*scale),null);
+	}
+
+	public String getRef() {
+		return ref;
 	}
 }

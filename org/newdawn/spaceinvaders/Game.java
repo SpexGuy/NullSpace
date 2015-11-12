@@ -144,6 +144,10 @@ public class Game extends Canvas {
 		wingman = new Wingman(this, ship, "sprites/ship.gif");
 
 		levels[currentLevel].initEntities();
+		aliens.completeFrame();
+		ships.completeFrame();
+		projectiles.completeFrame();
+		lasers.completeFrame();
 	}
 	
 	/**
