@@ -12,7 +12,7 @@ public class PowerupManager {
             {'A','S','D','F'},
             {'A','S','D','F','W','E'},
             {'A','S','D','F','W','E','R'},
-            {'A','S','D','F','W','E','R','T'}
+            {'A','S','D','F','W','E','R','G'}
     };
     private static final double powerLeakage = 1.0 / 4000;
     private static final Color backgroundColor = new Color(0, 0, 0, 0x8F);
