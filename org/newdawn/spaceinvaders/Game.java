@@ -256,6 +256,7 @@ public class Game extends Canvas {
 			}
 
 			// cycle round drawing all the entities we have in the game
+			powerupManager.drawBackground(g);
 			for (Entity entity : aliens) {
 				entity.draw(g);
 			}

@@ -19,6 +19,8 @@ public class PowerupManager {
 
     private Game game;
     private Powerup[] powerups;
+    private Font backgroundFont;
+    private Font multiplierFont;
 
     private int numPages;
     private int levelNumber = 0;
@@ -84,36 +86,48 @@ public class PowerupManager {
         return powerLeakage;
     }
 
+    public void drawBackground(Graphics2D g) {
+        Font oldFont = g.getFont();
+        if (backgroundFont == null) {
+            backgroundFont = new Font(oldFont.getName(), oldFont.getStyle(), 300);
+            multiplierFont = new Font(oldFont.getName(), oldFont.getStyle(), 30);
+        }
+
+        // Draw the target character key
+        double z = (double) flashCounter / flashDuration;
+        int r  = (int) (0x3F * (1-z)  + 0xFF * z);
+        int gb = (int) (0x3F * (1-z));
+        g.setColor(new Color(r, gb, gb));
+        g.setFont(backgroundFont);
+        g.drawRoundRect(game.getWidth()/2 - 400/2, game.getHeight()/2 - 400/2 + 50, 400, 400, 100, 100);
+        FontMetrics bigFM = g.getFontMetrics();
+        g.drawString(""+target, game.getWidth()/2 - bigFM.charWidth(target)/2, game.getHeight()/2 + 40 + bigFM.getHeight()/2 - bigFM.getDescent());
+
+        // Draw the multiplier
+        g.setFont(multiplierFont);
+        FontMetrics lilFM = g.getFontMetrics();
+        String multiplierStr = String.format("(x%.2f)", getMultiplier());
+        g.drawString(multiplierStr, game.getWidth()/2 - lilFM.stringWidth(multiplierStr)/2, game.getHeight()/2 + 40 + bigFM.getHeight()/2);
+
+        g.setFont(oldFont);
+    }
+
     public void draw(Graphics2D g) {
         // Draw a background to cover high aliens and projectiles
         g.setColor(backgroundColor);
         g.fillRect(0, 0, game.getWidth(), 25 + 25 + 25 + 5);
 
-        // Draw the target character key
-        int gb = 0xFF - (0xFF * flashCounter / flashDuration);
-        g.setColor(new Color(0xFF, gb, gb));
-        g.drawRoundRect(5, 5, 20, 20, 5, 5);
-        FontMetrics fm = g.getFontMetrics();
-        g.drawString(""+target, 5 + 20/2 - fm.charWidth(target)/2, 5 + 20/2 + fm.getHeight()/2 - fm.getDescent());
-
         // Draw the power bar
-        int barLeft = 5 + 20 + 5;
-        int width = game.getWidth() - 5 - barLeft;
+        int width = game.getWidth() - 5 - 5;
         if (activePowerup == null && pageNumber > 0) {
             g.setColor(powerups[pageNumber-1].getColor());
-            g.fillRoundRect(barLeft, 5, width, 20, 5, 5);
+            g.fillRoundRect(5, 5, width, 20, 5, 5);
         }
         Color powerColor = powerups[pageNumber].getColor();
         g.setColor(powerColor);
-        g.fillRoundRect(barLeft, 5, (int)(pageScore * width), 20, 5, 5);
-        g.setColor(Color.DARK_GRAY);
-        g.drawRoundRect(barLeft, 5, width, 20, 5, 5);
-
-        // Draw the multiplier
-
+        g.fillRoundRect(5, 5, (int)(pageScore * width), 20, 5, 5);
         g.setColor(Color.GRAY);
-        String multiplierStr = String.format("(x%.2f)", getMultiplier());
-        g.drawString(multiplierStr, barLeft + 5, 5 + 20/2 + fm.getHeight()/2 - fm.getDescent());
+        g.drawRoundRect(5, 5, width, 20, 5, 5);
 
         // Draw the powerup tags
         for (int c = 0; c < numPages; c++) {
@@ -133,6 +147,7 @@ public class PowerupManager {
                 g.setColor(Color.GRAY);
             }
             g.drawRoundRect(x, y, 20, 20, 5, 5);
+            FontMetrics fm = g.getFontMetrics();
             g.drawString(""+(c+1), x + 20/2 - fm.charWidth((char)(c+'1'))/2, y + 20/2 + fm.getHeight()/2 - fm.getDescent());
             g.drawString(powerups[c].getName(), x + 20 + 5, y + 20/2 + fm.getHeight()/2 - fm.getDescent());
         }
