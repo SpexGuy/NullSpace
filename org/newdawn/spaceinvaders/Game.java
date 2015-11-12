@@ -117,6 +117,8 @@ public class Game extends Canvas {
 		ship = new ShipEntity(this,"sprites/ship.gif",370,550);
 		wingman = new Wingman(this, ship, "sprites/ship.gif");
 		paddle = new ShipEntity(this, "sprites/paddle.png", 0, 0);
+		// create the player ship and place it roughly in the center of the screen
+		ships.add(ship);
 		initEntities();
 		currentMessage = new Message(this, "Welcome to NullSpace!",
 						 new Message(this, "Hold the spacebar to fire, and use the arrow keys to move.",
@@ -132,7 +134,6 @@ public class Game extends Canvas {
 	private void startGame() {
 		// clear out any existing entities and initialise a new set
 		aliens.clear();
-		ships.clear();
 		projectiles.clear();
 		initEntities();
 		scorekeeper.restore();
@@ -152,9 +153,6 @@ public class Game extends Canvas {
 	 * entity will be added to the overall list of entities in the game.
 	 */
 	private void initEntities() {
-		// create the player ship and place it roughly in the center of the screen
-		ships.add(ship);
-
 		levels[currentLevel].initEntities();
 		aliens.completeFrame();
 		ships.completeFrame();
