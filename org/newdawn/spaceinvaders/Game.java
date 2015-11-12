@@ -63,6 +63,7 @@ public class Game extends Canvas {
 	private boolean firePressed = false;
 	/** True if game logic needs to be applied this loop, normally as a result of a game event */
 	private boolean aliensHitEdge = false;
+	private int numSpeedupsNeeded = 0;
 	
 	/**
 	 * Construct our game and set it running.
@@ -131,6 +132,8 @@ public class Game extends Canvas {
 		leftPressed = false;
 		rightPressed = false;
 		firePressed = false;
+		aliensHitEdge = false;
+		numSpeedupsNeeded = 0;
 	}
 	
 	/**
@@ -183,10 +186,7 @@ public class Game extends Canvas {
 
 		// if there are still some aliens left then they all need to get faster, so
 		// speed up all the existing aliens
-		for (AlienEntity alien : aliens) {
-			// speed up by 2%
-			alien.setHorizontalMovement(alien.getHorizontalMovement() * 1.02);
-		}
+		numSpeedupsNeeded++;
 	}
 	
 	/**
@@ -278,6 +278,12 @@ public class Game extends Canvas {
 					alien.moveDown(alienMultiplier);
 				}
 				aliensHitEdge = false;
+			}
+			while (numSpeedupsNeeded > 0) {
+				for (AlienEntity alien : aliens) {
+					alien.setHorizontalMovement(alien.getHorizontalMovement() * 1.02);
+				}
+				numSpeedupsNeeded--;
 			}
 
 			powerupManager.draw(g);
