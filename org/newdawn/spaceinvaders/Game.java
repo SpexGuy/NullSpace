@@ -327,13 +327,6 @@ public class Game extends Canvas {
 		startGame();
 	}
 
-	public void onCorrectCharacter() {
-		// TODO: Increment streak
-	}
-	public void onIncorrectCharacter() {
-		// TODO: End streak
-	}
-
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
 	}

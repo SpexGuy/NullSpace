@@ -11,9 +11,9 @@ public class PowerupManager {
     private static final int flashIntensity = 0x7F;
     private static final char[][] levels = {
             {'A','S','D','F'},
-            {'A','S','D','F','Q','W','E','R'},
-            {'A','S','D','F','Q','W','E','R','Z','X','C','V'},
-            {'A','S','D','F','Q','W','E','R','Z','X','C','V','T','G','B'}
+            {'A','S','D','F','W','E'},
+            {'A','S','D','F','W','E','X','C'},
+            {'A','S','D','F','W','E','X','C'}
     };
     private static final double powerLeakage = 1.0/(10 * 8 * 60);
     private static final Color backgroundColor = new Color(0, 0, 0, 0x8F);
@@ -27,6 +27,7 @@ public class PowerupManager {
 
     private int pageNumber = 0;
     private double pageScore = 0;
+    private int streakCount = 0;
     private char target;
     private Powerup activePowerup = null;
 
@@ -83,24 +84,36 @@ public class PowerupManager {
     }
 
     public void draw(Graphics2D g) {
+        // Draw a background to cover high aliens and projectiles
         g.setColor(backgroundColor);
         g.fillRect(0, 0, game.getWidth(), 25 + 25 + 25 + 5);
 
+        // Draw the target character key
         g.setColor(Color.WHITE);
         g.drawRoundRect(5, 5, 20, 20, 5, 5);
         FontMetrics fm = g.getFontMetrics();
         g.drawString(""+target, 5 + 20/2 - fm.charWidth(target)/2, 5 + 20/2 + fm.getHeight()/2 - fm.getDescent());
 
-        int width = game.getWidth() - 5 - 10 - 20 - 5;
+        // Draw the power bar
+        int barLeft = 5 + 20 + 5;
+        int width = game.getWidth() - 5 - barLeft;
         if (activePowerup == null && pageNumber > 0) {
             g.setColor(powerups[pageNumber-1].getColor());
-            g.fillRoundRect(5 + 20 + 10, 5, width, 20, 5, 5);
+            g.fillRoundRect(barLeft, 5, width, 20, 5, 5);
         }
-        g.setColor(powerups[pageNumber].getColor());
-        g.fillRoundRect(5 + 20 + 10, 5, (int)(pageScore * width), 20, 5, 5);
+        Color powerColor = powerups[pageNumber].getColor();
+        g.setColor(powerColor);
+        g.fillRoundRect(barLeft, 5, (int)(pageScore * width), 20, 5, 5);
         g.setColor(Color.DARK_GRAY);
-        g.drawRoundRect(5 + 20 + 10, 5, width, 20, 5, 5);
+        g.drawRoundRect(barLeft, 5, width, 20, 5, 5);
 
+        // Draw the multiplier
+
+        g.setColor(Color.GRAY);
+        String multiplierStr = String.format("(x%.2f)", getMultiplier());
+        g.drawString(multiplierStr, barLeft + 5, 5 + 20/2 + fm.getHeight()/2 - fm.getDescent());
+
+        // Draw the powerup tags
         for (int c = 0; c < numPages; c++) {
             int x = 5 + ((game.getWidth() - 10) * (c%4))/5;
             int y = 25 * (1 + c/4) + 5;
@@ -169,23 +182,25 @@ public class PowerupManager {
 
     private void onIncorrectCharacter() {
         flashCounter = flashDuration;
-        game.onIncorrectCharacter();
+        streakCount = 0;
     }
 
     private void onCorrectCharacter() {
-        double charScore = 1.0 / getDifficulty();
-        // TODO: multiplier?
+        double charScore = getMultiplier() / getDifficulty();
+        streakCount++;
         pageScore += charScore;
         if (pageScore >= 1.0) {
             advancePage();
         }
-
-        game.onCorrectCharacter();
         setTargetCharacter();
     }
 
     private double getDifficulty() {
         return 3 + pageNumber;
+    }
+
+    private double getMultiplier() {
+        return 1.0 + 0.05 * streakCount;
     }
 
     private void advancePage() {
