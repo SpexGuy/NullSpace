@@ -23,6 +23,11 @@ public class ShipEntity extends VelocityEntity {
 		this.game = game;
 	}
 
+	public void moveTo(ShipEntity other) {
+		x = other.x + other.getWidth()/2 - getWidth()/2;
+		y = other.y;
+	}
+
 	/**
 	 * Request that the ship move itself based on an elapsed amount of
 	 * time
@@ -38,7 +43,7 @@ public class ShipEntity extends VelocityEntity {
 		}
 		// if we're moving right and have reached the right hand side
 		// of the screen, don't move
-		if ((dx > 0) && (x > 750)) {
+		if ((dx > 0) && (x + getWidth() > 790)) {
 			return;
 		}
 		

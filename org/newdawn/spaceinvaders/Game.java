@@ -38,6 +38,7 @@ public class Game extends Canvas {
 	/** The entity representing the player */
 	private ShipEntity ship;
 	private Wingman wingman;
+	private ShipEntity paddle;
 	/** The speed at which the player's ship should move (pixels/sec) */
 	private static final double moveSpeed = 300;
 	private final Weapon defaultWeapon = new ProjectileWeapon(this, 500);
@@ -53,7 +54,7 @@ public class Game extends Canvas {
 			new Level3(this),
 			new Level4(this)
 	};
-	private int currentLevel = 0;
+	private int currentLevel = 3;
 
 	/** True if the left cursor key is currently pressed */
 	private boolean leftPressed = false;
@@ -64,6 +65,7 @@ public class Game extends Canvas {
 	/** True if game logic needs to be applied this loop, normally as a result of a game event */
 	private boolean aliensHitEdge = false;
 	private int numSpeedupsNeeded = 0;
+	private boolean breakoutMode = false;
 	
 	/**
 	 * Construct our game and set it running.
@@ -151,6 +153,7 @@ public class Game extends Canvas {
 		ship = new ShipEntity(this,"sprites/ship.gif",370,550);
 		ships.add(ship);
 		wingman = new Wingman(this, ship, "sprites/ship.gif");
+		paddle = new ShipEntity(this, "sprites/paddle.png", 0, 0);
 
 		levels[currentLevel].initEntities();
 		aliens.completeFrame();
@@ -232,11 +235,14 @@ public class Game extends Canvas {
 				}
 
 				// cycle round asking each entity to move itself
-				for (AlienEntity entity : aliens) {
-					entity.update(alienMultiplier * delta);
+				if (!breakoutMode) {
+					for (AlienEntity entity : aliens) {
+						entity.update(alienMultiplier * delta);
+					}
 				}
 				ship.update(delta);
 				wingman.update(delta);
+				paddle.moveTo(ship);
 				for (VelocityEntity entity : projectiles) {
 					entity.update(delta);
 				}
@@ -252,6 +258,9 @@ public class Game extends Canvas {
 				// both entities that the collision has occurred
 				projectiles.checkCollisions(aliens);
 				aliens.checkCollisions(ships);
+				if (breakoutMode) {
+					projectiles.checkCollisions(ships);
+				}
 
 				// remove any entity that has been marked for clear up
 				aliens.completeFrame();
@@ -267,7 +276,11 @@ public class Game extends Canvas {
 			for (Entity entity : aliens) {
 				entity.draw(g);
 			}
-			ship.draw(g);
+			if (breakoutMode) {
+				paddle.draw(g);
+			} else {
+				ship.draw(g);
+			}
 			wingman.draw(g);
 			for (Entity entity : projectiles) {
 				entity.draw(g);
@@ -375,10 +388,22 @@ public class Game extends Canvas {
 	}
 
 	public void startBreakout() {
-		// TODO: Breakout mode
+		projectiles.clear();
+		projectiles.add(new BreakoutBall(this, "sprites/ball.png", ship.getX() + 5, ship.getY() - 10));
+		breakoutMode = true;
+		ships.clear();
+		ships.add(paddle);
 	}
 	public void stopBreakout() {
-		// TODO
+		projectiles.clear();
+		breakoutMode = false;
+		ships.clear();
+		ships.add(ship);
+	}
+	public void breakoutBallOut(BreakoutBall ball) {
+		// just relaunch
+		projectiles.remove(ball);
+		projectiles.add(new BreakoutBall(this, "sprites/ball.png", paddle.getX() + 50, paddle.getY() - 10));
 	}
 
 	public void acceptKonamiCode() {
@@ -415,8 +440,6 @@ public class Game extends Canvas {
 	 * @author Kevin Glass
 	 */
 	private class KeyInputHandler extends KeyAdapter {
-		/** The number of key presses we've had while waiting for an "any key" press */
-		private int pressCount = 1;
 		
 		/**
 		 * Notification from AWT that a key has been pressed. Note that
