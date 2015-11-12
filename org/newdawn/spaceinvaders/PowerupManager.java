@@ -38,13 +38,13 @@ public class PowerupManager {
         this.numPages = numPages;
         this.powerups = new Powerup[] {
                 new WeaponPowerup(game, Color.BLUE, "Fast Reload", new ProjectileWeapon(game, 250), 1/3.0, 5000, 4000),
-                new DoubleScorePowerup(game, Color.CYAN, 1/4.0, 10000, 10000),
-                new WingmanPowerup(game, Color.GREEN, 1/5.0, 10000, 10000),
-                new PausePowerup(game, Color.YELLOW, 1/6.0, 6000, 4000),
-                new WeaponPowerup(game, Color.ORANGE, "Piercing Shots", new PiercingWeapon(game, 500), 1/7.0, 4000, 4000),
-                new BackInTimePowerup(game, Color.RED, 1/8.0, 6000, 3000),
-                new WeaponPowerup(game, Color.MAGENTA, "Laser", new LaserWeapon(game, 500), 1/9.0, 5000, 6000),
-                new BreakoutPowerup(game, new Color(0x7F00FF), 1/10.0, 20000, 15000)
+                new DoubleScorePowerup(game, Color.CYAN, 1/3.5, 10000, 10000),
+                new WingmanPowerup(game, Color.GREEN, 1/4.0, 10000, 10000),
+                new PausePowerup(game, Color.YELLOW, 1/4.5, 6000, 4000),
+                new WeaponPowerup(game, Color.ORANGE, "Piercing Shots", new PiercingWeapon(game, 500), 1/5.0, 4000, 4000),
+                new BackInTimePowerup(game, Color.RED, 1/5.5, 6000, 3000),
+                new WeaponPowerup(game, Color.MAGENTA, "Laser", new LaserWeapon(game, 500), 1/6.0, 5000, 6000),
+                new BreakoutPowerup(game, new Color(0x7F00FF), 1/6.5, 20000, 15000)
         };
         setTargetCharacter();
     }
@@ -195,7 +195,7 @@ public class PowerupManager {
     private double getPower() {
         if (activePowerup != null)
             return activePowerup.getPower(activePowerupTime);
-        return 1.0 / (3 + pageNumber);
+        return 1.0 / (3 + 0.5 * pageNumber);
     }
 
     private double getMultiplier() {
