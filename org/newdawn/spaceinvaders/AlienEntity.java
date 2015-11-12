@@ -71,7 +71,6 @@ public class AlienEntity extends VelocityEntity {
 	public boolean kill() {
 		if (dead)
 			return false;
-		dead = true;
 
 		if (size > 0) {
 			for (int c = 0; c < 2; c++) {
@@ -85,11 +84,23 @@ public class AlienEntity extends VelocityEntity {
 				}
 			}
 		}
-		game.getAliens().remove(this);
-		game.notifyAlienKilled(this);
+		die();
 		return true;
 	}
-	
+
+	public boolean incinerate() {
+		if (dead)
+			return false;
+		die();
+		return true;
+	}
+
+	private void die() {
+		game.getAliens().remove(this);
+		game.notifyAlienKilled(this);
+		dead = true;
+	}
+
 	/**
 	 * Notification that this alien has collided with another entity
 	 * 
