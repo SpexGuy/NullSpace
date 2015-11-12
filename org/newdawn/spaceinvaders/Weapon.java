@@ -37,7 +37,7 @@ class ProjectileWeapon extends Weapon {
     }
     @Override
     protected void createShotEntity(Entity ship) {
-        game.getProjectiles().add(new ShotEntity(game,"sprites/shot.gif",ship.getX()+10,ship.getY()-30, 1));
+        game.getProjectiles().add(new ShotEntity(game,"sprites/shot.gif",ship.getX()+ship.getWidth()/2 - 6,ship.getY()-30, 1));
     }
 }
 

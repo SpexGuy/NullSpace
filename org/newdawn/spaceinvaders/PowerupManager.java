@@ -54,7 +54,20 @@ public class PowerupManager {
     public void setNumPages(int numPages) {
         assert(numPages >= 1);
         assert(numPages <= powerups.length);
+        if (numPages < this.numPages) {
+            reset();
+        }
         this.numPages = numPages;
+    }
+
+    private void reset() {
+        pageNumber = 0;
+        pageScore = 0;
+        streakCount = 0;
+        if (activePowerup != null) {
+            activePowerup.deactivate();
+            activePowerup = null;
+        }
     }
 
     public void setLevelNumber(int levelNumber) {

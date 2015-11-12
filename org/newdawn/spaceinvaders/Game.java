@@ -153,13 +153,7 @@ public class Game extends Canvas {
 	 */
 	private void initEntities() {
 		// create the player ship and place it roughly in the center of the screen
-		ship.setX(370);
-		ship.setY(550);
-		if (breakoutMode) {
-			ships.add(paddle);
-		} else {
-			ships.add(ship);
-		}
+		ships.add(ship);
 
 		levels[currentLevel].initEntities();
 		aliens.completeFrame();
@@ -252,7 +246,9 @@ public class Game extends Canvas {
 				for (VelocityEntity entity : projectiles) {
 					entity.update(delta);
 				}
-				cheater.update(delta);
+			}
+			cheater.update(delta);
+			if (currentMessage == null) {
 				for (Laser laser : lasers) {
 					laser.update(delta);
 				}
