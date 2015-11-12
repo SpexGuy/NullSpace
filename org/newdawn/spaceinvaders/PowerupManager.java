@@ -89,7 +89,8 @@ public class PowerupManager {
         g.fillRect(0, 0, game.getWidth(), 25 + 25 + 25 + 5);
 
         // Draw the target character key
-        g.setColor(Color.WHITE);
+        int gb = 0xFF - (0xFF * flashCounter / flashDuration);
+        g.setColor(new Color(0xFF, gb, gb));
         g.drawRoundRect(5, 5, 20, 20, 5, 5);
         FontMetrics fm = g.getFontMetrics();
         g.drawString(""+target, 5 + 20/2 - fm.charWidth(target)/2, 5 + 20/2 + fm.getHeight()/2 - fm.getDescent());
@@ -133,12 +134,6 @@ public class PowerupManager {
             g.drawRoundRect(x, y, 20, 20, 5, 5);
             g.drawString(""+(c+1), x + 20/2 - fm.charWidth((char)(c+'1'))/2, y + 20/2 + fm.getHeight()/2 - fm.getDescent());
             g.drawString(powerups[c].getName(), x + 20 + 5, y + 20/2 + fm.getHeight()/2 - fm.getDescent());
-        }
-
-        if (flashCounter > 0) {
-            int alpha = (flashIntensity*flashCounter) / flashDuration;
-            g.setColor(new Color(255, 0, 0, alpha));
-            g.fillRect(0, 0, game.getWidth(), game.getHeight());
         }
     }
 
