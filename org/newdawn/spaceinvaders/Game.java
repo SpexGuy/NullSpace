@@ -478,23 +478,12 @@ public class Game extends Canvas {
 		 * @param e The details of the key that was typed. 
 		 */
 		public void keyTyped(KeyEvent e) {
-			// if we're waiting for a "any key" type then
-			// check if we've received any recently. We may
-			// have had a keyType() event from the user releasing
-			// the shoot or move keys, hence the use of the "pressCount"
-			// counter.
-			if (currentMessage != null) {
-				if (pressCount >= 1) {
-					// since we've now received our key typed
-					// event we can mark it as such and start 
-					// our new game
-					currentMessage.dismiss();
-					pressCount = 0;
-				} else {
-					pressCount++;
-				}
+
+			// if we hit enter, dismiss the message.
+			if (currentMessage != null && e.getKeyChar() == '\n') {
+				currentMessage.dismiss();
 			}
-			
+
 			// if we hit escape, then quit the game
 			if (e.getKeyChar() == 27) {
 				gameRunning = false;
