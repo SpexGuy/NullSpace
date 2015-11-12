@@ -42,7 +42,13 @@ class Level1 extends Level {
 
     @Override
     public Message win() {
-        return new Message(game, "Congratulations! They're gone for now...");
+        return new Message(game, "Well done! More are on their way, though...",
+               new Message(game, "Luckily, we have reinforcements coming too!",
+               new Message(game, "With enough power, press 3 to call in a wingman.",
+               new Message(game, "Our researchers have been experimenting with time.",
+               new Message(game, "Press 4 to pause time for the aliens!",
+               new Message(game, "Remember, you can keep building power while a powerup is active to keep it active.",
+               new Message(game, "Here they come! Good luck!")))))));
     }
 }
 
@@ -64,7 +70,13 @@ class Level2 extends Level {
     }
     @Override
     public Message win() {
-        return new Message(game, "Congratulations! They're gone for now...");
+        return new Message(game, "That was a close one!",
+               new Message(game, "See that multiplier under the letter in the background?",
+               new Message(game, "The more power you build without mistakes, the faster you build power.",
+               new Message(game, "This will be key for unlocking better powerups.",
+               new Message(game, "We've developed piercing shots, which can destroy up to five enemies.",
+               new Message(game, "We've also figured out how to reverse time, and make the enemy go backwards!",
+               new Message(game, "Oh no, here they come again!")))))));
     }
 }
 
@@ -91,7 +103,15 @@ class Level3 extends Level {
     }
     @Override
     public Message win() {
-        return new Message(game, "Congratulations! They're gone for now...");
+        return new Message(game, "Wow! Well Done! I was worried there.",
+               new Message(game, "This is it, the aliens are sending their largest fleet.",
+               new Message(game, "Defeat this, and you can go home.",
+               new Message(game, "We've developed a couple of new powerups for you!",
+               new Message(game, "Press 7 to bust out your new Laser.",
+               new Message(game, "The laser incinerates enemies, preventing them from multiplying.",
+               new Message(game, "We've also built the devastating Breakout Device.",
+               new Message(game, "Use it at your own risk.",
+               new Message(game, "This is it. You've trained for this. You're ready for this. Go get 'em.")))))))));
     }
 }
 
@@ -117,6 +137,7 @@ class Level4 extends Level {
     }
     @Override
     public Message win() {
-        return new Message(game, "That was the last of them! Play again?");
+        return new Message(game, "You've done it! Earth is safe once more!",
+               new Message(game, "Play again?"));
     }
 }

@@ -42,7 +42,7 @@ public class Game extends Canvas {
 	private static final double moveSpeed = 300;
 	private final Weapon defaultWeapon = new ProjectileWeapon(this, 500);
 	private Weapon weapon = defaultWeapon;
-	private PowerupManager powerupManager = new PowerupManager(this, 8);
+	private PowerupManager powerupManager = new PowerupManager(this, 2);
 	private ScoreManager scorekeeper = new ScoreManager(this);
 	private KonamiCode konami = new KonamiCode(this);
 	private Cheater cheater = new Cheater(this);
@@ -113,7 +113,11 @@ public class Game extends Canvas {
 		// initialise the entities in our game so there's something
 		// to see at startup
 		initEntities();
-		currentMessage = new Message(this, "Welcome to NullSpace!");
+		currentMessage = new Message(this, "Welcome to NullSpace!",
+						 new Message(this, "Hold the spacebar to fire, and use the arrow keys to move.",
+						 new Message(this, "Press the key shown in the background to build up power.",
+						 new Message(this, "For best results, put your left hand on asdf, with your thumb on the spacebar.",
+						 new Message(this, "Once you have enough power, press a number key to activate a powerup!")))));
 	}
 	
 	/**
@@ -178,6 +182,7 @@ public class Game extends Canvas {
 		scorekeeper.setRestorePoint();
 		setMessage(levels[currentLevel].win());
 		currentLevel = (currentLevel + 1) % levels.length;
+		powerupManager.setNumPages((currentLevel+1)*2);
 	}
 	
 	/**
