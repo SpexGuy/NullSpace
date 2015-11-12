@@ -4,9 +4,9 @@ package org.newdawn.spaceinvaders;
  * Created by martin on 11/11/15.
  */
 public abstract class Level {
+    private static final int yOffset = 50;
     protected Game game;
     private final int xOffset;
-    private final int yOffset;
     private final int cellWidth;
     private final int cellHeight;
 
@@ -15,7 +15,6 @@ public abstract class Level {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         this.xOffset = (800 - (gridWidth * cellWidth))/2;
-        this.yOffset = 50;
     }
 
     protected void addAlien(int row, int col, int size) {
