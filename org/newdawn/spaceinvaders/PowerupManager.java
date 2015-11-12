@@ -8,7 +8,6 @@ import java.awt.*;
  */
 public class PowerupManager {
     private static final int flashDuration = 200;
-    private static final int flashIntensity = 0x7F;
     private static final char[][] levels = {
             {'A','S','D','F'},
             {'A','S','D','F','W','E'},
