@@ -26,7 +26,6 @@ public class Sprite {
 	public Sprite(Image image, String ref) {
 		this.image = image;
 		this.ref = ref;
-		System.out.println("Loaded "+ref+" at ("+getWidth()+"x"+getHeight()+")");
 	}
 	
 	/**
