@@ -57,7 +57,7 @@ class LaserWeapon extends Weapon {
     }
     @Override
     protected void createShotEntity(Entity ship) {
-        int xPos = ship.getX()+10;
+        int xPos = ship.getX()+17;
 
         int bestYPos = 0;
         AlienEntity bestAlien = null;
@@ -71,6 +71,6 @@ class LaserWeapon extends Weapon {
             }
         }
 
-        game.addLaser(new Laser(game, xPos, ship.getY()-30, xPos, bestYPos, bestAlien));
+        game.addLaser(new Laser(game, xPos, ship.getY(), xPos, bestYPos, bestAlien));
     }
 }
