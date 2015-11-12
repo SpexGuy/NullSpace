@@ -14,7 +14,7 @@ public class PowerupManager {
             {'A','S','D','F','W','E','R'},
             {'A','S','D','F','W','E','R','T'}
     };
-    private static final double powerLeakage = 1.0 / 3000;
+    private static final double powerLeakage = 1.0 / 4000;
     private static final Color backgroundColor = new Color(0, 0, 0, 0x8F);
 
     private Game game;
